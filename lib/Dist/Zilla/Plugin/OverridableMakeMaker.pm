@@ -1,4 +1,4 @@
-package Dist::Zilla::Plugin::OverridableOverridableMakeMaker;
+package Dist::Zilla::Plugin::OverridableMakeMaker;
 
 # ABSTRACT: build a Makefile.PL that uses ExtUtils::MakeMaker
 use Moose;
