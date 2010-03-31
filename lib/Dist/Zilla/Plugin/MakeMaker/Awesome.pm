@@ -3,7 +3,6 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use Moose::Autobox;
-use Data::Dump 'dump';
 use List::MoreUtils qw(any uniq);
 use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
@@ -381,6 +380,37 @@ in L<re::engine::PCRE>:
     } };
     
     __PACKAGE__->meta->make_immutable;
+
+And another example from L<re::engine::Plan9>:
+
+    package inc::Plan9MakeMaker;
+    use Moose;
+    
+    extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+    
+    override _build_WriteMakefile_args => sub {
+        my ($self) = @_;
+    
+        our @DIR = qw(libutf libfmt libregexp);
+        our @OBJ = map { s/\.c$/.o/; $_ }
+                   grep { ! /test/ }
+                   glob "lib*/*.c";
+    
+        return +{
+            %{ super() },
+            DIR           => [ @DIR ],
+            INC           => join(' ', map { "-I$_" } @DIR),
+    
+            # This used to be '-shared lib*/*.o' but that doesn't work on Win32
+            LDDLFLAGS     => "-shared @OBJ",
+        };
+    };
+    
+    __PACKAGE__->meta->make_immutable;
+
+If you have custom code in your L<Makefile.PL> that L<Dist::Zilla>
+can't replace via its default facilities you'll be able replace it by
+using this module.
 
 =head1 OVERRIDE
 
