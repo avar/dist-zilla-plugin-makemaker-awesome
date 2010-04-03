@@ -303,8 +303,6 @@ has 'eumm_version' => (
 );
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
-1;
 
 __END__
 
@@ -322,7 +320,7 @@ run custom code in your F<Makefile.PL> you're out of luck.
 This plugin is 100% compatable with L<Dist::Zilla::Plugin::MakeMaker>,
 but if you need something more complex you can just subclass it:
 
-Simple use, in your F<dist.ini>:
+Then, in your F<dist.ini>:
 
     ;; Replace [MakeMaker]
     ;[MakeMaker]
@@ -335,7 +333,9 @@ In your F<dist.ini>:
 
     [=inc::MyDistMakeMaker / MyDistMakeMaker]
 
-Then in your F<inc/MyDistMakeMaker.pm>, real example from L<Hailo>:
+Then in your F<inc/MyDistMakeMaker.pm>, real example from L<Hailo>
+(which has C<[=inc::HailoMakeMaker / HailoMakeMaker]> in its
+F<dist.ini>):
 
     package inc::HailoMakeMaker;
     use Moose;
@@ -408,9 +408,13 @@ And another example from L<re::engine::Plan9>:
     
     __PACKAGE__->meta->make_immutable;
 
-If you have custom code in your L<Makefile.PL> that L<Dist::Zilla>
-can't replace via its default facilities you'll be able replace it by
-using this module.
+If you have custom code in your L<ExtUtils::MakeMaker>-based
+L<Makefile.PL> that L<Dist::Zilla> can't replace via its default
+facilities you'll be able replace it by using this module.
+
+Even if your F<Makefile.PL> isn't L<ExtUtils::MakeMaker>-based you
+should be able to override it. You'll just have to provide a new
+L</"_build_MakeFile_PL_template">.
 
 =head1 OVERRIDE
 

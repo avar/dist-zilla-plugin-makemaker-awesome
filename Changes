@@ -2,6 +2,8 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+    - More documentation proofreading.
+
 0.03 2010-03-31 15:19:08
 
     - Example from re::engine::Plan9 + more docs
