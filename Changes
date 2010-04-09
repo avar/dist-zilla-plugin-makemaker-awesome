@@ -2,6 +2,14 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+    - Upgrade to support Dist::Zilla v2
+    
+    - Remove copy/paste code we can inherit from
+      Dist::Zilla::Plugin::MakeMaker.
+
+    - remove obsolete chainloading support that was never used,
+      subclassing is now preferred.
+
 0.04 2010-04-03 12:58:01
 
     - More documentation proofreading.
