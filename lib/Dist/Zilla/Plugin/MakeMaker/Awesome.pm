@@ -7,13 +7,13 @@ use List::MoreUtils qw(any uniq);
 use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
 
+extends 'Dist::Zilla::Plugin::MakeMaker';
+
 with 'Dist::Zilla::Role::BuildRunner';
 with 'Dist::Zilla::Role::PrereqSource';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::TextTemplate';
-
-extends 'Dist::Zilla::Plugin::MakeMaker';
 
 has MakeFile_PL_template => (
     is            => 'ro',
@@ -272,27 +272,6 @@ sub setup_installer {
     $self->add_file($file);
     return;
 }
-
-sub build {
-  my $self = shift;
-  system($^X => 'Makefile.PL') and die "error with Makefile.PL\n";
-  system('make')               and die "error running make\n";
-  return;
-}
-
-sub test {
-  my ( $self, $target ) = @_;
-  ## no critic Punctuation
-  $self->build;
-  system('make test') and die "error running make test\n";
-  return;
-}
-
-has 'eumm_version' => (
-  isa => 'Str',
-  is  => 'rw',
-  default => '6.11',
-);
 
 __PACKAGE__->meta->make_immutable;
 
