@@ -8,7 +8,7 @@ use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
 
 with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::FixedPrereqs';
+with 'Dist::Zilla::Role::PrereqSource';
 with 'Dist::Zilla::Role::InstallTool';
 with 'Dist::Zilla::Role::TestRunner';
 with 'Dist::Zilla::Role::TextTemplate';
@@ -222,20 +222,18 @@ sub _build_share_dir_block {
     return \@share_dir_block;
 }
 
-sub prereq {
+sub register_prereqs {
     my ($self) = @_;
 
     $self->zilla->register_prereqs(
-        {
-            phase => 'configure' },
+        { phase => 'configure' },
         'ExtUtils::MakeMaker' => $self->eumm_version,
     );
 
     return {} unless uniq map {; $_->share->flatten } $self->dir_plugins;
 
     $self->zilla->register_prereqs(
-        {
-            phase => 'configure' },
+        { phase => 'configure' },
         'File::ShareDir::Install' => 0.03,
     );
 
