@@ -245,12 +245,6 @@ sub prereq {
 sub setup_installer {
     my ($self, $arg) = @_;
 
-    my $chainload = 'Makefile.PL.PL';
-    if (-f $chainload) {
-        do $chainload;
-        return;
-    }
-
     ## Sanity checks
     confess "can't install files with whitespace in their names"
         if grep { /\s/ } $self->exe_files;
