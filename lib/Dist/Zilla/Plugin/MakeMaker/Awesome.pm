@@ -30,11 +30,9 @@ sub _build_MakeFile_PL_template {
 {{ $perl_prereq ? qq<BEGIN { require $perl_prereq; }> : ''; }}
 use strict;
 use warnings;
-use ExtUtils::MakeMaker 6.11;
+use ExtUtils::MakeMaker {{ $eumm_version }};
 {{ $share_dir_block[0] }}
 my {{ $WriteMakefileArgs }}
-delete $WriteMakefileArgs{LICENSE}
-  unless eval { ExtUtils::MakeMaker->VERSION(6.31) };
 
 WriteMakefile(%WriteMakefileArgs);
 {{ $share_dir_block[1] }}
@@ -258,6 +256,7 @@ sub setup_installer {
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
         {
+            eumm_version      => \($self->eumm_version),
             perl_prereq       =>  \$perl_prereq,
             share_dir_block   => \@share_dir_block,
             WriteMakefileArgs => \$makefile_dump,
