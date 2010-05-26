@@ -82,6 +82,12 @@ sub _build_WriteMakefile_args {
         ->as_string_hash;
     };
 
+    my $build_prereq
+        = $prereqs->requirements_for(qw(build requires))
+        ->clone
+        ->add_requirements($prereqs->requirements_for(qw(test requires)))
+        ->as_string_hash;
+
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
         NAME      => $name,
@@ -92,7 +98,7 @@ sub _build_WriteMakefile_args {
         EXE_FILES => [ $self->exe_files ],
 
         CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
-        BUILD_REQUIRES     => $prereqs_dump->(qw(build     requires)),
+        BUILD_REQUIRES     => $build_prereq,
         PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
         test => { TESTS => join q{ }, sort keys %$test_dirs },
