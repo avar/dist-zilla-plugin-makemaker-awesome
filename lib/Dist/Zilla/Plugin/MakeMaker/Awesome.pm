@@ -6,6 +6,7 @@ use Moose::Autobox;
 use List::MoreUtils qw(any uniq);
 use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
+use Dist::Zilla::Plugin::MakeMaker 3.101450;
 
 extends 'Dist::Zilla::Plugin::MakeMaker';
 
