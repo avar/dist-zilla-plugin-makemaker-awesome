@@ -282,7 +282,8 @@ sub setup_installer {
     my @share_dir_block = $self->share_dir_block;
 
     my $makefile_dump = $self->WriteMakefile_dump;
-    my $perl_prereq = $self->zilla->prereq->as_distmeta->{requires}{perl};
+    my $perl_prereq = $self->zilla->prereqs->requirements_for(qw(runtime requires))
+        ->as_string_hash->{perl};
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
         {
