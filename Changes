@@ -2,6 +2,8 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+0.07 2010-05-26 12:17:04
+
     - Upgrade to depend on Dist::Zilla v3. The required changes to
       Awesome.pm were backported from upstream's MakeMaker.pm.
 
