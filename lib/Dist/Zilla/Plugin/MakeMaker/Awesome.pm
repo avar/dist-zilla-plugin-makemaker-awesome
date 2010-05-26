@@ -71,8 +71,16 @@ sub _build_WriteMakefile_args {
     (my $name = $self->zilla->name) =~ s/-/::/g;
     my $test_dirs = $self->test_dirs;
 
-    my $meta_prereq = $self->zilla->prereq->as_distmeta;
-    my $perl_prereq = delete $meta_prereq->{requires}{perl};
+    my $prereqs = $self->zilla->prereqs;
+    my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
+    ->as_string_hash->{perl};
+
+    my $prereqs_dump = sub {
+        $prereqs->requirements_for(@_)
+        ->clone
+        ->clear_requirement('perl')
+        ->as_string_hash;
+    };
 
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
@@ -83,9 +91,9 @@ sub _build_WriteMakefile_args {
         LICENSE   => $self->zilla->license->meta_yml_name,
         EXE_FILES => [ $self->exe_files ],
 
-        CONFIGURE_REQUIRES => delete $meta_prereq->{configure_requires},
-        BUILD_REQUIRES     => delete $meta_prereq->{build_requires},
-        PREREQ_PM          => delete $meta_prereq->{requires},
+        CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
+        BUILD_REQUIRES     => $prereqs_dump->(qw(build     requires)),
+        PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
         test => { TESTS => join q{ }, sort keys %$test_dirs },
     );
