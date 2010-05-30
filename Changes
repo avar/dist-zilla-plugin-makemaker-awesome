@@ -2,6 +2,9 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+    - Installing EXE_FILES was broken due to some missed merges in
+      0.07.
+
 0.07 2010-05-26 12:17:04
 
     - Upgrade to depend on Dist::Zilla v3. The required changes to
