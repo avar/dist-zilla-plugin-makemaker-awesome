@@ -156,56 +156,6 @@ sub _build_test_dirs {
     return \%test_dirs;
 }
 
-has bin_dirs => (
-    is            => 'ro',
-    isa           => ArrayRef[Str],
-    auto_deref    => 1,
-    lazy_build    => 1,
-    documentation => "The bin/ or script/ directories used by ->exe_files",
-);
-
-sub _build_bin_dirs {
-    my ($self) = @_;
-    
-    my @bin_dirs = uniq map {; $_->bin->flatten   } $self->dir_plugins;
-
-    return \@bin_dirs;
-}
-
-has share_dirs => (
-    is            => 'ro',
-    isa           => ArrayRef[Str],
-    auto_deref    => 1,
-    lazy_build    => 1,
-    documentation => "The share directories used by File::ShareDir",
-);
-
-sub _build_share_dirs {
-    my ($self) = @_;
-
-    my @share_dirs  = uniq map {; $_->share->flatten } $self->dir_plugins;    
-
-    return \@share_dirs;
-}
-
-has dir_plugins => (
-    is            => 'ro',
-    isa           => ArrayRef[Str],
-    auto_deref    => 1,
-    lazy_build    => 1,
-    documentation => "The plugin directories, used by ShareDir",
-);
-
-sub _build_dir_plugins {
-    my ($self) = @_;
-
-    my @dir_plugins = $self->zilla->plugins
-        ->grep( sub { $_->isa('Dist::Zilla::Plugin::InstallDirs') })
-        ->flatten;
-
-    return \@dir_plugins;
-}
-
 has exe_files => (
     is            => 'ro',
     isa           => ArrayRef[Str],
@@ -236,12 +186,10 @@ has share_dir_block => (
 sub _build_share_dir_block {
     my ($self) = @_;
 
-    my @share_dirs = $self->share_dirs;
-
     my @share_dir_block = (q{}, q{});
 
-    if ($share_dirs[0]) {
-        my $share_dir = quotemeta $share_dirs[0];
+    if (my $share_dir = $self->zilla->_share_dir) {
+        my $share_dir = quotemeta $share_dir;
         @share_dir_block = (
             qq{use File::ShareDir::Install;\ninstall_share "$share_dir";\n},
             qq{package\nMY;\nuse File::ShareDir::Install qw(postamble);\n},
@@ -259,7 +207,7 @@ sub register_prereqs {
         'ExtUtils::MakeMaker' => $self->eumm_version,
     );
 
-    return {} unless uniq map {; $_->share->flatten } $self->dir_plugins;
+    return {} unless $self->zilla->_share_dir;
 
     $self->zilla->register_prereqs(
         { phase => 'configure' },
@@ -275,10 +223,6 @@ sub setup_installer {
     ## Sanity checks
     confess "can't install files with whitespace in their names"
         if grep { /\s/ } $self->exe_files;
-
-    my @share_dirs = $self->share_dirs;
-
-    confess "can't install more than one ShareDir" if @share_dirs > 1;
 
     my @share_dir_block = $self->share_dir_block;
 
@@ -442,19 +386,10 @@ L</"_build_MakeFile_PL_template">.
 
 =head2 test_dirs
 
-=head2 bin_dirs
-
-=head2 share_dirs
-
 =head2 exe_files
 
 The test/bin/share dirs and exe_files. These'll all be passed to
 F</"_build_WriteMakefile_args"> later.
-
-=head2 dir_plugins
-
-Used for L<Dist::Zilla::Plugin::ShareDir> support. Don't touch it if
-you don't need some deep ShareDir magic.
 
 =head2 _build_share_dir_block
 
