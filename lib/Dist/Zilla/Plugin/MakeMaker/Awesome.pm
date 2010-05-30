@@ -166,11 +166,9 @@ has exe_files => (
 
 sub _build_exe_files {
     my ($self) = @_;
-    
-    my @exe_files = $self->zilla->files
-        ->grep(sub { my $f = $_; any { $f->name =~ qr{^\Q$_\E[\\/]} } $self->bin_dirs; })
-        ->map( sub { $_->name })
-        ->flatten;
+
+    my @exe_files =
+        $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
 
     return \@exe_files;
 }
