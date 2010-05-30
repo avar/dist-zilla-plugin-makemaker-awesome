@@ -219,7 +219,7 @@ sub setup_installer {
     my ($self, $arg) = @_;
 
     ## Sanity checks
-    confess "can't install files with whitespace in their names"
+    $self->log_fatal("can't install files with whitespace in their names")
         if grep { /\s/ } $self->exe_files;
 
     my @share_dir_block = $self->share_dir_block;
