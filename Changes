@@ -2,6 +2,8 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+0.10 2010-07-02 23:30:25
+
     - Fixed share_dir breakage caused by Dist::Zilla not being awesome
 
 0.09 2010-07-02 21:51:19
