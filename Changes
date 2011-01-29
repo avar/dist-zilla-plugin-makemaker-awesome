@@ -2,6 +2,9 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+    - Remove a trailing space in Awesome.pm, patch by Jesse Luehrs at
+      https://github.com/avar/dist-zilla-plugin-makemaker-awesome/pull/2
+
 0.11 2010-09-30 10:36:44
 
     - Remove a trailing space in Awesome.pm, spotted and patched by
