@@ -2,6 +2,8 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 
 {{$NEXT}}
 
+    - fix load issue with Data::Dumper (Karen Etheridge)
+
 0.12 2011-01-29 11:58:27
 
     - Remove a trailing space in Awesome.pm, patch by Jesse Luehrs at
