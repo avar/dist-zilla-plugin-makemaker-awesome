@@ -7,6 +7,7 @@ use List::MoreUtils qw(any uniq);
 use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
 use Dist::Zilla::Plugin::MakeMaker 4.101830;
+use Data::Dumper;
 
 extends 'Dist::Zilla::Plugin::MakeMaker';
 
