@@ -80,9 +80,12 @@ TEMPLATE
 }
 
 has WriteMakefile_args => (
-    is            => 'ro',
     isa           => HashRef,
-    auto_deref    => 1,
+    traits        => ['Hash'],
+    handles       => {
+        WriteMakefile_args => 'elements',
+        delete_WriteMakefile_arg => 'delete',
+    },
     lazy_build    => 1,
     documentation => "The arguments passed to ExtUtil::MakeMaker's WriteMakefile()",
 );
@@ -268,9 +271,10 @@ sub setup_installer {
 
     my @share_dir_block = $self->share_dir_block;
 
+    my $perl_prereq = $self->delete_WriteMakefile_arg('MIN_PERL_VERSION');
+
     my $makefile_dump = $self->WriteMakefile_dump;
-    my $perl_prereq = $self->zilla->prereqs->requirements_for(qw(runtime requires))
-        ->as_string_hash->{perl};
+
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
         {
