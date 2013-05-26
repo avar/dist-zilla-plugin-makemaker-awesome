@@ -305,7 +305,7 @@ limited, if you want to stray from the marked path and do something
 that would normally be done in a C<package MY> section or otherwise
 run custom code in your F<Makefile.PL> you're out of luck.
 
-This plugin is 100% compatable with L<Dist::Zilla::Plugin::MakeMaker>,
+This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker>,
 but if you need something more complex you can just subclass it:
 
 Then, in your F<dist.ini>:
@@ -351,6 +351,8 @@ F<dist.ini>):
     };
 
     __PACKAGE__->meta->make_immutable;
+
+=for stopwords distro
 
 Or maybe you're writing an XS distro and want to pass custom arguments
 to C<WriteMakefile()>, here's an example of adding a C<LIBS> argument
@@ -406,9 +408,9 @@ L</"_build_MakeFile_PL_template">.
 
 =head1 OVERRIDE
 
-These are the methods you can currently L<override> in your custom
-F<inc/> module. The work that this module does is entirely done in
-small modular methods that can be overriden in your subclass. Here are
+These are the methods you can currently C<override> or method-modify in your
+custom F<inc/> module. The work that this module does is entirely done in
+small modular methods that can be overridden in your subclass. Here are
 some of the highlights:
 
 =head2 _build_MakeFile_PL_template
@@ -417,27 +419,31 @@ Returns L<Text::Template> string used to construct the F<Makefile.PL>.
 
 =head2 _build_WriteMakefile_args
 
-A C<HashRef> of arguments that'll be passed to
+A C<HashRef> of arguments that will ll be passed to
 L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
 
 =head2 _build_WriteMakefile_dump
 
 Takes the return value of L</"_build_WriteMakefile_args"> and
-constructs a L<Str> that'll be included in the F<Makefile.PL> by
+constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
 =head2 test_dirs
 
 =head2 exe_files
 
-The test/bin/share dirs and exe_files. These'll all be passed to
+=for stopwords dirs
+
+The test/bin/share dirs and exe_files. These will all be passed to
 F</"_build_WriteMakefile_args"> later.
 
 =head2 _build_share_dir_block
 
+=for stopwords sharedir
+
 An C<ArrayRef[Str]> with two elements to be used by
 L</"_build_MakeFile_PL_template">. The first will declare your
-L<ShareDir|File::ShareDir::Install> and the second will add a magic
+L<sharedir|File::ShareDir::Install> and the second will add a magic
 C<package MY> section to install it. Deep magic.
 
 =head2 OTHER
@@ -461,6 +467,8 @@ to filter it out.
 =back
 
 =head1 BUGS
+
+=for stopwords INI
 
 This plugin would suck less if L<Dist::Zilla> didn't use a INI-based
 config system so you could add a stuff like this in your main
