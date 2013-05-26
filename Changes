@@ -46,7 +46,7 @@ Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
 0.05 2010-04-09 12:58:41
 
     - Upgrade to support Dist::Zilla v2
-    
+
     - Remove copy/paste code we can inherit from
       Dist::Zilla::Plugin::MakeMaker.
 

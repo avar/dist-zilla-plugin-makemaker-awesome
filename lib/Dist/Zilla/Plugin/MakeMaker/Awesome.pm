@@ -327,73 +327,73 @@ F<dist.ini>):
 
     package inc::HailoMakeMaker;
     use Moose;
-    
+
     extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
-    
+
     override _build_MakeFile_PL_template => sub {
         my ($self) = @_;
         my $template = super();
-    
+
         $template .= <<'TEMPLATE';
     package MY;
-    
+
     sub test {
         my $inherited = shift->SUPER::test(@_);
-    
+
         # Run tests with Moose and Mouse
         $inherited =~ s/^test_dynamic :: pure_all\n\t(.*?)\n/test_dynamic :: pure_all\n\tANY_MOOSE=Mouse $1\n\tANY_MOOSE=Moose $1\n/m;
-    
+
         return $inherited;
     }
     TEMPLATE
-    
+
         return $template;
     };
-    
+
     __PACKAGE__->meta->make_immutable;
 
 Or maybe you're writing an XS distro and want to pass custom arguments
 to C<WriteMakefile()>, here's an example of adding a C<LIBS> argument
 in L<re::engine::PCRE>:
-    
+
     package inc::PCREMakeMaker;
     use Moose;
-    
+
     extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
-    
+
     override _build_WriteMakefile_args => sub { +{
         # Add LIBS => to WriteMakefile() args
         %{ super() },
         LIBS => [ '-lpcre' ],
     } };
-    
+
     __PACKAGE__->meta->make_immutable;
 
 And another example from L<re::engine::Plan9>:
 
     package inc::Plan9MakeMaker;
     use Moose;
-    
+
     extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
-    
+
     override _build_WriteMakefile_args => sub {
         my ($self) = @_;
-    
+
         our @DIR = qw(libutf libfmt libregexp);
         our @OBJ = map { s/\.c$/.o/; $_ }
                    grep { ! /test/ }
                    glob "lib*/*.c";
-    
+
         return +{
             %{ super() },
             DIR           => [ @DIR ],
             INC           => join(' ', map { "-I$_" } @DIR),
-    
+
             # This used to be '-shared lib*/*.o' but that doesn't work on Win32
             LDDLFLAGS     => "-shared @OBJ",
         };
     };
-    
+
     __PACKAGE__->meta->make_immutable;
 
 If you have custom code in your L<ExtUtils::MakeMaker>-based
