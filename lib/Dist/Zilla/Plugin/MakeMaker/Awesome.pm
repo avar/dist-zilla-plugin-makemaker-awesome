@@ -36,6 +36,19 @@ use ExtUtils::MakeMaker {{ $eumm_version }};
 {{ $share_dir_block[0] }}
 my {{ $WriteMakefileArgs }}
 
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
+  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
+  for my $mod ( keys %$tr ) {
+    if ( exists $br->{$mod} ) {
+      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+    }
+    else {
+      $br->{$mod} = $tr->{$mod};
+    }
+  }
+}
+
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
   my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
   my $pp = $WriteMakefileArgs{PREREQ_PM};
@@ -87,7 +100,13 @@ sub _build_WriteMakefile_args {
     my $build_prereq
         = $prereqs->requirements_for(qw(build requires))
         ->clone
-        ->add_requirements($prereqs->requirements_for(qw(test requires)))
+        ->clear_requirement('perl')
+        ->as_string_hash;
+
+      my $test_prereq
+        = $prereqs->requirements_for(qw(test requires))
+        ->clone
+        ->clear_requirement('perl')
         ->as_string_hash;
 
     my %WriteMakefile = (
@@ -101,6 +120,7 @@ sub _build_WriteMakefile_args {
 
         CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
         BUILD_REQUIRES     => $build_prereq,
+        TEST_REQUIRES      => $test_prereq,
         PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
         test => { TESTS => join q{ }, sort keys %$test_dirs },
