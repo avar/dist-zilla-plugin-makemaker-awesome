@@ -143,7 +143,7 @@ sub _build_WriteMakefile_dump {
     my %write_makefile_args = $self->WriteMakefile_args;
 
     my $makefile_args_dumper = do {
-        local $Data::Dumper::Quotekeys = 1;
+        local $Data::Dumper::Useqq     = 1;
         local $Data::Dumper::Indent    = 1;
         local $Data::Dumper::Sortkeys  = 1;
         Data::Dumper->new(
