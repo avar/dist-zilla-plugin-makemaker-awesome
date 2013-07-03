@@ -263,7 +263,7 @@ sub register_prereqs {
 }
 
 sub setup_installer {
-    my ($self, $arg) = @_;
+    my $self = shift;
 
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
