@@ -436,6 +436,10 @@ L</"_build_MakeFile_PL_template">.
 
 =head2 exe_files
 
+=head2 register_prereqs
+
+=head2 setup_installer
+
 =for stopwords dirs
 
 The test/bin/share dirs and exe_files. These will all be passed to
