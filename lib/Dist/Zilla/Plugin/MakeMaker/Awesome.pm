@@ -11,12 +11,6 @@ use Data::Dumper;
 
 extends 'Dist::Zilla::Plugin::MakeMaker';
 
-with 'Dist::Zilla::Role::BuildRunner';
-with 'Dist::Zilla::Role::PrereqSource';
-with 'Dist::Zilla::Role::InstallTool';
-with 'Dist::Zilla::Role::TestRunner';
-with 'Dist::Zilla::Role::TextTemplate';
-
 has MakeFile_PL_template => (
     is            => 'ro',
     isa           => 'Str',
