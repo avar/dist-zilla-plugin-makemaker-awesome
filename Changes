@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.15      2013-09-08 20:11:17Z (Karen Etheridge)
     - re-release with properly encoded META.yml
 
 0.14   2013-05-26 15:12:26
