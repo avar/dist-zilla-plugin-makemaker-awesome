@@ -1,4 +1,5 @@
 package Dist::Zilla::Plugin::MakeMaker::Awesome;
+# ABSTRACT: A more awesome MakeMaker plugin for L<Dist::Zilla>
 
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
@@ -294,9 +295,7 @@ __PACKAGE__->meta->make_immutable;
 
 __END__
 
-=head1 NAME
-
-Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<Dist::Zilla>
+=pod
 
 =head1 SYNOPSIS
 
@@ -483,16 +482,5 @@ configuration file like you can with L<Module::Install>.
 The F<.ini> file format can only support key-value pairs whereas any
 complex use of L<ExtUtils::MakeMaker> requires running custom Perl
 code and passing complex data structures to C<WriteMakefile>.
-
-=head1 AUTHOR
-
-E<AElig>var ArnfjE<ouml>rE<eth> Bjarmason <avar@cpan.org>
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2010 E<AElig>var ArnfjE<ouml>rE<eth> Bjarmason <avar@cpan.org>
-
-This program is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
 
 =cut
