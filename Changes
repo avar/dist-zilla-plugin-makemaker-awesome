@@ -1,74 +1,58 @@
-Revision history for Dist::Zilla::Plugin::MakeMaker::Awesome
+Revision history for {{ $dist->name }}
 
 {{$NEXT}}
 
-0.14 2013-05-26 15:12:26
-
+0.14   2013-05-26 15:12:26
     - test_requires support, as done in Dist::Zilla 4.300032 by Tatsuhiko
       Miyagawa
 
-0.13 2013-05-15 17:11:35
-
+0.13   2013-05-15 17:11:35
     - fix load issue with Data::Dumper (Karen Etheridge)
 
-0.12 2011-01-29 11:58:27
-
+0.12   2011-01-29 11:58:27
     - Remove a trailing space in Awesome.pm, patch by Jesse Luehrs at
       https://github.com/avar/dist-zilla-plugin-makemaker-awesome/pull/2
 
-0.11 2010-09-30 10:36:44
-
+0.11   2010-09-30 10:36:44
     - Remove a trailing space in Awesome.pm, spotted and patched by
       Robin Smidsrød, see
       http://github.com/avar/dist-zilla-plugin-makemaker-awesome/pull/1
 
-0.10 2010-07-02 23:30:25
-
+0.10   2010-07-02 23:30:25
     - Fixed share_dir breakage caused by Dist::Zilla not being awesome
 
-0.09 2010-07-02 21:51:19
-
+0.09   2010-07-02 21:51:19
     - Add a DIAGNOSTICS section that notes a common error
 
-0.08 2010-05-30 12:10:40
-
+0.08   2010-05-30 12:10:40
     - Installing EXE_FILES was broken due to some missed merges in
       0.07.
 
-0.07 2010-05-26 12:17:04
-
+0.07   2010-05-26 12:17:04
     - Upgrade to depend on Dist::Zilla v3. The required changes to
       Awesome.pm were backported from upstream's MakeMaker.pm.
 
-0.06 2010-05-01 21:18:14
-
+0.06   2010-05-01 21:18:14
     - Merge changes to the Makefile.PL template from
       Dist::Zilla::Plugin::MakeMaker
 
-0.05 2010-04-09 12:58:41
-
+0.05   2010-04-09 12:58:41
     - Upgrade to support Dist::Zilla v2
-
     - Remove copy/paste code we can inherit from
       Dist::Zilla::Plugin::MakeMaker.
-
     - remove obsolete chainloading support that was never used,
       subclassing is now preferred.
 
-0.04 2010-04-03 12:58:01
-
+0.04   2010-04-03 12:58:01
     - More documentation proofreading.
 
-0.03 2010-03-31 15:19:08
-
+0.03   2010-03-31 15:19:08
     - Example from re::engine::Plan9 + more docs
 
-0.02 2010-03-31 14:20:26
-
+0.02   2010-03-31 14:20:26
     - Added more awesome and renamed to
       Dist::Zilla::Plugin::MakeMaker::Awesome from
       Dist::Zilla::Plugin::OverridableMakeMaker.
 
-0.01 2010-03-13 07:40:07
-
+0.01   2010-03-13 07:40:07
     - Initial CPAN release
