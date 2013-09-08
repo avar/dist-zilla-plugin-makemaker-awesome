@@ -298,6 +298,14 @@ __END__
 
 Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<Dist::Zilla>
 
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+    ;; Replace [MakeMaker]
+    ;[MakeMaker]
+    [=inc::MyMakeMaker]
+
 =head1 DESCRIPTION
 
 L<Dist::Zilla>'s L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugin is
@@ -306,15 +314,9 @@ that would normally be done in a C<package MY> section or otherwise
 run custom code in your F<Makefile.PL> you're out of luck.
 
 This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker>,
-but if you need something more complex you can just subclass it:
+so if you need something more complex you can just subclass it.
 
-Then, in your F<dist.ini>:
-
-    ;; Replace [MakeMaker]
-    ;[MakeMaker]
-    [MakeMaker::Awesome]
-
-More complex use, adding a C<package MY> section to your
+As an example, adding a C<package MY> section to your
 F<Makefile.PL>:
 
 In your F<dist.ini>:
