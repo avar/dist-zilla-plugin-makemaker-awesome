@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - re-release with properly encoded META.yml
 
 0.14   2013-05-26 15:12:26
     - test_requires support, as done in Dist::Zilla 4.300032 by Tatsuhiko
