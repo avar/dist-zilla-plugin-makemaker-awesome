@@ -414,11 +414,11 @@ some of the highlights:
 
 =head2 _build_MakeFile_PL_template
 
-Returns L<Text::Template> string used to construct the F<Makefile.PL>.
+Returns a L<Text::Template> string used to construct the F<Makefile.PL>.
 
 =head2 _build_WriteMakefile_args
 
-A C<HashRef> of arguments that will ll be passed to
+A C<HashRef> of arguments that will be passed to
 L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
 
 =head2 _build_WriteMakefile_dump
