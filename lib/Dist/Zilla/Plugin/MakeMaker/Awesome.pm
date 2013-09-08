@@ -272,9 +272,10 @@ sub setup_installer {
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
         {
+            dist              => \($self->zilla),
             plugin            => \$self,
             eumm_version      => \($self->eumm_version),
-            perl_prereq       =>  \$perl_prereq,
+            perl_prereq       => \$perl_prereq,
             share_dir_block   => \@share_dir_block,
             WriteMakefileArgs => \$makefile_dump,
         },
