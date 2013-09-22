@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.16      2013-09-22 19:48:15Z (Karen Etheridge)
     - allow bootstrapping users of this module by using a default $VERSION if
       the real one is not available
 

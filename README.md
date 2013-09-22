@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for [D
 
 # VERSION
 
-version 0.15
+version 0.16
 
 # SYNOPSIS
 
