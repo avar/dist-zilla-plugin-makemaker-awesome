@@ -15,7 +15,8 @@ extends 'Dist::Zilla::Plugin::MakeMaker';
 has MakeFile_PL_template => (
     is            => 'ro',
     isa           => 'Str',
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_MakeFile_PL_template',
     documentation => "The Text::Template used to construct the ExtUtils::MakeMaker Makefile.PL",
 );
 
@@ -81,7 +82,8 @@ has WriteMakefile_args => (
         WriteMakefile_args => 'elements',
         delete_WriteMakefile_arg => 'delete',
     },
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_WriteMakefile_args',
     documentation => "The arguments passed to ExtUtil::MakeMaker's WriteMakefile()",
 );
 
@@ -142,7 +144,8 @@ sub _build_WriteMakefile_args {
 has WriteMakefile_dump => (
     is            => 'ro',
     isa           => Str,
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_WriteMakefile_dump',
     documentation => "A Data::Dumper Str for using WriteMakefile_args used by MakeFile_PL_template"
 );
 
@@ -168,7 +171,8 @@ has test_dirs => (
     is            => 'ro',
     isa           => HashRef[Str],
     auto_deref    => 1,
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_test_dirs',
     documentation => "The test directories given to ExtUtil::MakeMaker's test (in munged form)",
 );
 
@@ -190,7 +194,8 @@ has exe_files => (
     is            => 'ro',
     isa           => ArrayRef[Str],
     auto_deref    => 1,
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_exe_files',
     documentation => "The test directories given to ExtUtil::MakeMaker's EXE_FILES (in munged form)",
 );
 
@@ -207,7 +212,8 @@ has share_dir_block => (
     is            => 'ro',
     isa           => ArrayRef[Str],
     auto_deref    => 1,
-    lazy_build    => 1,
+    lazy          => 1,
+    builder       => '_build_share_dir_block',
     documentation => "The share dir block used in `MakeFile_PL_template'",
 );
 
