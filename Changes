@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - fix undef string appearing in place of dist name in generated
+      Makefile.PL comment
 
 0.16      2013-09-22 19:48:15Z (Karen Etheridge)
     - allow bootstrapping users of this module by using a default $VERSION if
