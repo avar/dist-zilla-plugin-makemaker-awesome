@@ -6,10 +6,11 @@ use Test::Deep;
 use lib 't/lib';
 
 use Test::DZil;
+use Path::Tiny;
 
 {
   my $tzil = Builder->from_config(
-    { dist_root => 'corpus/dist/DZT' },
+    { dist_root => 'does_not_exist' },
     {
       add_files => {
         'source/dist.ini' => simple_ini(
@@ -20,6 +21,8 @@ use Test::DZil;
           [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
                                           perl           => '5.008' } ],
         ),
+        path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
+        path(qw(source t basic.t)) => 'warn "here is a test";',
       },
     },
   );
