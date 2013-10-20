@@ -427,6 +427,23 @@ some of the highlights:
 
 Returns a L<Text::Template> string used to construct the F<Makefile.PL>.
 
+If you need to insert some additional code to the beginning or end of
+F<Makefile.PL> (without modifying the existing content, you should use an
+C<around> method modifier, something like this:
+
+    around _build_MakeFile_PL_template => sub {
+        my $orig = shift;
+        my $self = shift;
+
+        my $NEW_CONTENT = ...;
+
+        # insert new content near the beginning of the file, preserving the
+        # preamble header
+        my $string = $self->$orig(@_);
+        $string =~ m/use warnings;\n\n/g;
+        return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
+    };
+
 =head2 _build_WriteMakefile_args
 
 A C<HashRef> of arguments that will be passed to
