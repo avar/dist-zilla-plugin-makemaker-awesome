@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.18      2013-10-20 18:29:23Z (Karen Etheridge)
     - re-release with encoding fixes in metadata
 
 0.17      2013-09-27 05:31:27Z (Karen Etheridge)

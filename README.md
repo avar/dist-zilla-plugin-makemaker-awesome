@@ -4,7 +4,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for [D
 
 # VERSION
 
-version 0.17
+version 0.18
 
 # SYNOPSIS
 
@@ -125,6 +125,23 @@ some of the highlights:
 
 Returns a [Text::Template](http://search.cpan.org/perldoc?Text::Template) string used to construct the `Makefile.PL`.
 
+If you need to insert some additional code to the beginning or end of
+`Makefile.PL` (without modifying the existing content, you should use an
+`around` method modifier, something like this:
+
+    around _build_MakeFile_PL_template => sub {
+        my $orig = shift;
+        my $self = shift;
+
+        my $NEW_CONTENT = ...;
+
+        # insert new content near the beginning of the file, preserving the
+        # preamble header
+        my $string = $self->$orig(@_);
+        $string =~ m/use warnings;\n\n/g;
+        return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
+    };
+
 ## \_build\_WriteMakefile\_args
 
 A `HashRef` of arguments that will be passed to
@@ -182,11 +199,11 @@ code and passing complex data structures to `WriteMakefile`.
 
 # AUTHOR
 
-Ã†var ArnfjÃ¶rÃ° Bjarmason <avar@cpan.org>
+Ævar Arnfjörð Bjarmason <avar@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ã†var ArnfjÃ¶rÃ° Bjarmason.
+This software is copyright (c) 2013 by Ævar Arnfjörð Bjarmason.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
@@ -196,4 +213,3 @@ the same terms as the Perl 5 programming language system itself.
 - Jesse Luehrs <doy@tozt.net>
 - Karen Etheridge <ether@cpan.org>
 - Robin Smidsrød <robin@smidsrod.no>
-- Ævar Arnfjörð Bjarmason <avar@cpan.org>
