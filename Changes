@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - re-release with encoding fixes in metadata
 
 0.17      2013-09-27 05:31:27Z (Karen Etheridge)
     - fix undef string appearing in place of dist name in generated
