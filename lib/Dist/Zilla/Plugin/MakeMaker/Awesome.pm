@@ -4,8 +4,6 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use Moose::Autobox;
-use List::MoreUtils qw(any uniq);
-use Dist::Zilla::File::InMemory;
 use namespace::autoclean;
 use Dist::Zilla::Plugin::MakeMaker 4.300032;
 use Data::Dumper;
