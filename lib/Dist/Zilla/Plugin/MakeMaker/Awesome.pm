@@ -271,11 +271,7 @@ sub setup_installer {
     $self->log_fatal("can't install files with whitespace in their names")
         if grep { /\s/ } $self->exe_files;
 
-    my @share_dir_block = $self->share_dir_block;
-
     my $perl_prereq = $self->delete_WriteMakefile_arg('MIN_PERL_VERSION');
-
-    my $makefile_dump = $self->WriteMakefile_dump;
 
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
@@ -284,8 +280,8 @@ sub setup_installer {
             plugin            => \$self,
             eumm_version      => \($self->eumm_version),
             perl_prereq       => \$perl_prereq,
-            share_dir_block   => \@share_dir_block,
-            WriteMakefileArgs => \$makefile_dump,
+            share_dir_block   => [ $self->share_dir_block ],
+            WriteMakefileArgs => \($self->WriteMakefile_dump),
         },
     );
 
