@@ -240,7 +240,8 @@ sub _build_share_dir_block {
         }
         @share_dir_block = (
             $preamble,
-            qq{package\nMY;\nuse File::Shar}.qq{eDir::Install qw(postamble);\n},
+            qq{\{\npackage\nMY;\nuse File::ShareDir::Install qw(postamble);\n\}\n},
+
         );
     }
 
