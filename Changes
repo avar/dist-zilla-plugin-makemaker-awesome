@@ -2,6 +2,8 @@ Revision history for {{ $dist->name }}
 
 {{$NEXT}}
     - also include the version of ourselves in generated headers
+    - synchronized prereqs are used as a fallback in Makefile.PL, as done in
+      [MakeMaker] v5.001
 
 0.18      2013-10-20 18:29:23Z (Karen Etheridge)
     - re-release with encoding fixes in metadata

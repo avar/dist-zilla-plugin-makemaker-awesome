@@ -7,6 +7,7 @@ use Moose::Autobox;
 use namespace::autoclean;
 use Dist::Zilla::Plugin::MakeMaker 4.300032;
 use Data::Dumper;
+use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
 extends 'Dist::Zilla::Plugin::MakeMaker';
 
@@ -38,30 +39,12 @@ use ExtUtils::MakeMaker {{ $eumm_version }};
 
 my {{ $WriteMakefileArgs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
-  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
-  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
-  for my $mod ( keys %$tr ) {
-    if ( exists $br->{$mod} ) {
-      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
-    }
-    else {
-      $br->{$mod} = $tr->{$mod};
-    }
-  }
-}
+my {{ $fallback_prereqs }}
 
-unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
-  my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
-  my $pp = $WriteMakefileArgs{PREREQ_PM};
-  for my $mod ( keys %$br ) {
-    if ( exists $pp->{$mod} ) {
-      $pp->{$mod} = $br->{$mod} if $br->{$mod} > $pp->{$mod};
-    }
-    else {
-      $pp->{$mod} = $br->{$mod};
-    }
-  }
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  delete $WriteMakefileArgs{TEST_REQUIRES};
+  delete $WriteMakefileArgs{BUILD_REQUIRES};
+  $WriteMakefileArgs{PREREQ_PM} = \%FallbackPrereqs;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
@@ -273,6 +256,7 @@ sub setup_installer {
             eumm_version      => \($self->eumm_version),
             perl_prereq       => \$perl_prereq,
             share_dir_block   => [ $self->share_dir_block ],
+            fallback_prereqs  => \($self->_fallback_prereq_pm),
             WriteMakefileArgs => \($self->WriteMakefile_dump),
         },
     );
@@ -294,6 +278,18 @@ sub _dump_as {
     $dumper->Indent( 1 );
     $dumper->Useqq( 1 );
     return $dumper->Dump;
+}
+
+# this is also in our superclass, as of 5.001, but we probably don't want to
+# add that dependency just yet.
+sub _fallback_prereq_pm {
+    my $self = shift;
+    my $fallback
+        = $self->zilla->prereqs->merged_requires
+        ->clone
+        ->clear_requirement('perl')
+        ->as_string_hash;
+    return $self->_dump_as( $fallback, '*FallbackPrereqs' );
 }
 
 __PACKAGE__->meta->make_immutable;
