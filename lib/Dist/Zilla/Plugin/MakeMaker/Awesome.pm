@@ -155,17 +155,7 @@ sub _build_WriteMakefile_dump {
     # Get arguments for WriteMakefile
     my %write_makefile_args = $self->WriteMakefile_args;
 
-    my $makefile_args_dumper = do {
-        local $Data::Dumper::Useqq     = 1;
-        local $Data::Dumper::Indent    = 1;
-        local $Data::Dumper::Sortkeys  = 1;
-        Data::Dumper->new(
-            [ \%write_makefile_args ],
-            [ '*WriteMakefileArgs' ],
-        );
-    };
-
-    return $makefile_args_dumper->Dump;
+    return $self->_dump_as(\%write_makefile_args, '*WriteMakefileArgs');
 }
 
 has test_dirs => (
@@ -294,6 +284,16 @@ sub setup_installer {
 
     $self->add_file($file);
     return;
+}
+
+sub _dump_as {
+    my ($self, $ref, $name) = @_;
+    require Data::Dumper;
+    my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
+    $dumper->Sortkeys( 1 );
+    $dumper->Indent( 1 );
+    $dumper->Useqq( 1 );
+    return $dumper->Dump;
 }
 
 __PACKAGE__->meta->make_immutable;
