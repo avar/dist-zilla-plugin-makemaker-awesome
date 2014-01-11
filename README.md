@@ -1,10 +1,10 @@
 # NAME
 
-Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla)
+Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla)
 
 # VERSION
 
-version 0.18
+version 0.19
 
 # SYNOPSIS
 
@@ -16,12 +16,12 @@ In your `dist.ini`:
 
 # DESCRIPTION
 
-[Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla)'s [MakeMaker](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::MakeMaker) plugin is
+[Dist::Zilla](https://metacpan.org/pod/Dist::Zilla)'s [MakeMaker](https://metacpan.org/pod/Dist::Zilla::Plugin::MakeMaker) plugin is
 limited, if you want to stray from the marked path and do something
 that would normally be done in a `package MY` section or otherwise
 run custom code in your `Makefile.PL` you're out of luck.
 
-This plugin is 100% compatible with [Dist::Zilla::Plugin::MakeMaker](http://search.cpan.org/perldoc?Dist::Zilla::Plugin::MakeMaker),
+This plugin is 100% compatible with [Dist::Zilla::Plugin::MakeMaker](https://metacpan.org/pod/Dist::Zilla::Plugin::MakeMaker),
 so if you need something more complex you can just subclass it.
 
 As an example, adding a `package MY` section to your
@@ -31,7 +31,7 @@ In your `dist.ini`:
 
     [=inc::MyDistMakeMaker / MyDistMakeMaker]
 
-Then in your `inc/MyDistMakeMaker.pm`, real example from [Hailo](http://search.cpan.org/perldoc?Hailo)
+Then in your `inc/MyDistMakeMaker.pm`, real example from [Hailo](https://metacpan.org/pod/Hailo)
 (which has `[=inc::HailoMakeMaker / HailoMakeMaker]` in its
 `dist.ini`):
 
@@ -64,7 +64,7 @@ Then in your `inc/MyDistMakeMaker.pm`, real example from [Hailo](http://search.c
 
 Or maybe you're writing an XS distro and want to pass custom arguments
 to `WriteMakefile()`, here's an example of adding a `LIBS` argument
-in [re::engine::PCRE](http://search.cpan.org/perldoc?re::engine::PCRE):
+in [re::engine::PCRE](https://metacpan.org/pod/re::engine::PCRE):
 
     package inc::PCREMakeMaker;
     use Moose;
@@ -79,7 +79,7 @@ in [re::engine::PCRE](http://search.cpan.org/perldoc?re::engine::PCRE):
 
     __PACKAGE__->meta->make_immutable;
 
-And another example from [re::engine::Plan9](http://search.cpan.org/perldoc?re::engine::Plan9):
+And another example from [re::engine::Plan9](https://metacpan.org/pod/re::engine::Plan9):
 
     package inc::Plan9MakeMaker;
     use Moose;
@@ -106,13 +106,13 @@ And another example from [re::engine::Plan9](http://search.cpan.org/perldoc?re::
 
     __PACKAGE__->meta->make_immutable;
 
-If you have custom code in your [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker)\-based
-[Makefile.PL](http://search.cpan.org/perldoc?Makefile.PL) that [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla) can't replace via its default
+If you have custom code in your [ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker)-based
+[Makefile.PL](https://metacpan.org/pod/Makefile.PL) that [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) can't replace via its default
 facilities you'll be able replace it by using this module.
 
-Even if your `Makefile.PL` isn't [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker)\-based you
+Even if your `Makefile.PL` isn't [ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker)-based you
 should be able to override it. You'll just have to provide a new
-["\_build\_MakeFile\_PL\_template"](#\_build\_MakeFile\_PL\_template).
+["\_build\_MakeFile\_PL\_template"](#_build_makefile_pl_template).
 
 # OVERRIDE
 
@@ -123,7 +123,7 @@ some of the highlights:
 
 ## \_build\_MakeFile\_PL\_template
 
-Returns a [Text::Template](http://search.cpan.org/perldoc?Text::Template) string used to construct the `Makefile.PL`.
+Returns a [Text::Template](https://metacpan.org/pod/Text::Template) string used to construct the `Makefile.PL`.
 
 If you need to insert some additional code to the beginning or end of
 `Makefile.PL` (without modifying the existing content, you should use an
@@ -145,13 +145,13 @@ If you need to insert some additional code to the beginning or end of
 ## \_build\_WriteMakefile\_args
 
 A `HashRef` of arguments that will be passed to
-[ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker)'s `WriteMakefile` function.
+[ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker)'s `WriteMakefile` function.
 
 ## \_build\_WriteMakefile\_dump
 
-Takes the return value of ["\_build\_WriteMakefile\_args"](#\_build\_WriteMakefile\_args) and
-constructs a [Str](http://search.cpan.org/perldoc?Str) that will be included in the `Makefile.PL` by
-["\_build\_MakeFile\_PL\_template"](#\_build\_MakeFile\_PL\_template).
+Takes the return value of ["\_build\_WriteMakefile\_args"](#_build_writemakefile_args) and
+constructs a [Str](https://metacpan.org/pod/Str) that will be included in the `Makefile.PL` by
+["\_build\_MakeFile\_PL\_template"](#_build_makefile_pl_template).
 
 ## test\_dirs
 
@@ -162,48 +162,48 @@ constructs a [Str](http://search.cpan.org/perldoc?Str) that will be included in 
 ## setup\_installer
 
 The test/bin/share dirs and exe\_files. These will all be passed to
-`/"\_build\_WriteMakefile\_args"` later.
+`/"_build_WriteMakefile_args"` later.
 
 ## \_build\_share\_dir\_block
 
 An `ArrayRef[Str]` with two elements to be used by
-["\_build\_MakeFile\_PL\_template"](#\_build\_MakeFile\_PL\_template). The first will declare your
-[sharedir](http://search.cpan.org/perldoc?File::ShareDir::Install) and the second will add a magic
+["\_build\_MakeFile\_PL\_template"](#_build_makefile_pl_template). The first will declare your
+[sharedir](https://metacpan.org/pod/File::ShareDir::Install) and the second will add a magic
 `package MY` section to install it. Deep magic.
 
 ## OTHER
 
 The main entry point is `setup_installer` via the
-[Dist::Zilla::Role::InstallTool](http://search.cpan.org/perldoc?Dist::Zilla::Role::InstallTool) role. There are also other magic
+[Dist::Zilla::Role::InstallTool](https://metacpan.org/pod/Dist::Zilla::Role::InstallTool) role. There are also other magic
 Dist::Zilla roles, check the source for more info.
 
 # DIAGNOSTICS
 
 - attempt to add Makefile.PL multiple times
 
-    This error from [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla) means that you've used both
+    This error from [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) means that you've used both
     `[MakeMaker]` and `[MakeMaker::Awesome]`. You've either included
     `MakeMaker` directly in `dist.ini`, or you have plugin bundle that
-    includes it. See [@Filter](http://search.cpan.org/perldoc?Dist::Zilla::PluginBundle::Filter) for how
+    includes it. See [@Filter](https://metacpan.org/pod/Dist::Zilla::PluginBundle::Filter) for how
     to filter it out.
 
 # BUGS
 
-This plugin would suck less if [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla) didn't use a INI-based
+This plugin would suck less if [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla) didn't use a INI-based
 config system so you could add a stuff like this in your main
-configuration file like you can with [Module::Install](http://search.cpan.org/perldoc?Module::Install).
+configuration file like you can with [Module::Install](https://metacpan.org/pod/Module::Install).
 
 The `.ini` file format can only support key-value pairs whereas any
-complex use of [ExtUtils::MakeMaker](http://search.cpan.org/perldoc?ExtUtils::MakeMaker) requires running custom Perl
+complex use of [ExtUtils::MakeMaker](https://metacpan.org/pod/ExtUtils::MakeMaker) requires running custom Perl
 code and passing complex data structures to `WriteMakefile`.
 
 # AUTHOR
 
-Ævar Arnfjörð Bjarmason <avar@cpan.org>
+Ã†var ArnfjÃ¶rÃ° Bjarmason <avar@cpan.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2013 by Ævar Arnfjörð Bjarmason.
+This software is copyright (c) 2014 by Ã†var ArnfjÃ¶rÃ° Bjarmason.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
@@ -212,4 +212,4 @@ the same terms as the Perl 5 programming language system itself.
 
 - Jesse Luehrs <doy@tozt.net>
 - Karen Etheridge <ether@cpan.org>
-- Robin Smidsrød <robin@smidsrod.no>
+- Robin SmidsrÃ¸d <robin@smidsrod.no>
