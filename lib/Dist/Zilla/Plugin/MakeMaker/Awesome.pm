@@ -5,7 +5,6 @@ use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use Moose::Autobox;
 use namespace::autoclean;
-use Data::Dumper;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
 extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
@@ -255,7 +254,7 @@ sub setup_installer {
             eumm_version      => \($self->eumm_version),
             perl_prereq       => \$perl_prereq,
             share_dir_block   => [ $self->share_dir_block ],
-            fallback_prereqs  => \($self->_fallback_prereq_pm),
+            fallback_prereqs  => \($self->fallback_prereq_pm),
             WriteMakefileArgs => \($self->WriteMakefile_dump),
         },
     );
@@ -267,28 +266,6 @@ sub setup_installer {
 
     $self->add_file($file);
     return;
-}
-
-sub _dump_as {
-    my ($self, $ref, $name) = @_;
-    require Data::Dumper;
-    my $dumper = Data::Dumper->new( [ $ref ], [ $name ] );
-    $dumper->Sortkeys( 1 );
-    $dumper->Indent( 1 );
-    $dumper->Useqq( 1 );
-    return $dumper->Dump;
-}
-
-# this is also in our superclass, as of 5.001, but we probably don't want to
-# add that dependency just yet.
-sub _fallback_prereq_pm {
-    my $self = shift;
-    my $fallback
-        = $self->zilla->prereqs->merged_requires
-        ->clone
-        ->clear_requirement('perl')
-        ->as_string_hash;
-    return $self->_dump_as( $fallback, '*FallbackPrereqs' );
 }
 
 __PACKAGE__->meta->make_immutable;
