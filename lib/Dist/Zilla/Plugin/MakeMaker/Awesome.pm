@@ -5,11 +5,10 @@ use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use Moose::Autobox;
 use namespace::autoclean;
-use Dist::Zilla::Plugin::MakeMaker 4.300032;
 use Data::Dumper;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
-extends 'Dist::Zilla::Plugin::MakeMaker';
+extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 
 has MakeFile_PL_template => (
     is            => 'ro',
