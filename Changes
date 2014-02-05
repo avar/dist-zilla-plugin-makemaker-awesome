@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.20      2014-02-05 05:05:05Z
     - fixed outdated prereq on Dist::Zilla::Plugin::MakeMaker (now requiring
       Dist::Zilla 5 for better prereq merging)
 
