@@ -7,18 +7,18 @@ Revision history for {{ $dist->name }}
     - synchronized prereqs are used as a fallback in Makefile.PL, as done in
       [MakeMaker] v5.001
 
-0.18      2013-10-20 18:29:23Z (Karen Etheridge)
+0.18      2013-10-20 18:29:23Z
     - re-release with encoding fixes in metadata
 
-0.17      2013-09-27 05:31:27Z (Karen Etheridge)
+0.17      2013-09-27 05:31:27Z
     - fix undef string appearing in place of dist name in generated
       Makefile.PL comment
 
-0.16      2013-09-22 19:48:15Z (Karen Etheridge)
+0.16      2013-09-22 19:48:15Z
     - allow bootstrapping users of this module by using a default $VERSION if
       the real one is not available
 
-0.15      2013-09-08 20:11:17Z (Karen Etheridge)
+0.15      2013-09-08 20:11:17Z
     - re-release with properly encoded META.yml
 
 0.14   2013-05-26 15:12:26
