@@ -3,6 +3,7 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
+use MooseX::Types::Stringlike 'Stringlike';
 use Moose::Autobox;
 use namespace::autoclean;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
@@ -11,7 +12,8 @@ extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 
 has MakeFile_PL_template => (
     is            => 'ro',
-    isa           => 'Str',
+    isa           => Stringlike,
+    coerce        => 1,
     lazy          => 1,
     builder       => '_build_MakeFile_PL_template',
     documentation => "The Text::Template used to construct the ExtUtils::MakeMaker Makefile.PL",
@@ -125,7 +127,8 @@ sub _build_WriteMakefile_args {
 
 has WriteMakefile_dump => (
     is            => 'ro',
-    isa           => Str,
+    isa           => Stringlike,
+    coerce        => 1,
     lazy          => 1,
     builder       => '_build_WriteMakefile_dump',
     documentation => "A Data::Dumper Str for using WriteMakefile_args used by MakeFile_PL_template"
