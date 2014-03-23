@@ -13,7 +13,7 @@ use Path::Tiny;
       add_files => {
         path(qw(source dist.ini)) => simple_ini(
           'GatherDir',
-          'MakeMaker',
+          'MakeMaker::Awesome',
           [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
           [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
           [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
@@ -27,7 +27,7 @@ use Path::Tiny;
 
   $tzil->build;
 
-  my $makemaker = $tzil->plugin_named('MakeMaker');
+  my $makemaker = $tzil->plugin_named('MakeMaker::Awesome');
 
   my %want = (
     DISTNAME => 'DZT-Sample',
@@ -54,9 +54,16 @@ use Path::Tiny;
   );
 
   cmp_deeply(
-    $makemaker->__write_makefile_args,
+    { $makemaker->WriteMakefile_args },
     \%want,
     'correct makemaker args generated',
+  );
+
+  my $content = $tzil->slurp_file('build/Makefile.PL');
+  like(
+    $content,
+    qr/(?{ quotemeta($tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs')) })/,
+    'arguments are dumped to Makefile.PL',
   );
 }
 
