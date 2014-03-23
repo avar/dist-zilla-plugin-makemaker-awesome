@@ -11,7 +11,7 @@ use Path::Tiny;
     { dist_root => 'does_not_exist' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini(
+        path(qw(source dist.ini)) => simple_ini(
           'GatherDir',
           'MakeMaker',
           [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
@@ -65,7 +65,7 @@ use Path::Tiny;
     { dist_root => 'corpus/dist/DZT' },
     {
       add_files => {
-        'source/dist.ini' => simple_ini(
+        path(qw(source dist.ini)) => simple_ini(
           'GatherDir',
           'MakeMaker',
           [ Prereqs => { perl => '5.8.1' } ],
