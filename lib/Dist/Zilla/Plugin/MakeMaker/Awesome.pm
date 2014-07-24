@@ -381,7 +381,7 @@ And another example from L<re::engine::Plan9>:
     __PACKAGE__->meta->make_immutable;
 
 If you have custom code in your L<ExtUtils::MakeMaker>-based
-L<Makefile.PL> that L<Dist::Zilla> can't replace via its default
+F<Makefile.PL> that L<Dist::Zilla> can't replace via its default
 facilities you'll be able replace it by using this module.
 
 Even if your F<Makefile.PL> isn't L<ExtUtils::MakeMaker>-based you
@@ -459,7 +459,7 @@ Dist::Zilla roles, check the source for more info.
 
 =over
 
-=item attempt to add Makefile.PL multiple times
+=item attempt to add F<Makefile.PL> multiple times
 
 This error from L<Dist::Zilla> means that you've used both
 C<[MakeMaker]> and C<[MakeMaker::Awesome]>. You've either included
