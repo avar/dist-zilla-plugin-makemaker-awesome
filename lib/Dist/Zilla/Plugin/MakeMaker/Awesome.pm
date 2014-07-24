@@ -41,6 +41,8 @@ my {{ $WriteMakefileArgs }}
 
 my {{ $fallback_prereqs }}
 
+{{ $makefile_args_hook || '' }}
+
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
   delete $WriteMakefileArgs{TEST_REQUIRES};
   delete $WriteMakefileArgs{BUILD_REQUIRES};
@@ -222,6 +224,18 @@ sub _build_share_dir_block {
     return \@share_dir_block;
 }
 
+has makefile_args_hook => (
+    is => 'ro',
+    isa => Str,
+    lazy => 1,
+    builder => '_build_makefile_args_hook',
+    documentation => "Perl code block, inserted after fill in \$WriteMakefileArgs, but before WriteMakefile call (empty by default)",
+);
+
+sub _build_makefile_args_hook {
+    return '';
+}
+
 sub register_prereqs {
     my ($self) = @_;
 
@@ -252,13 +266,14 @@ sub setup_installer {
     my $content = $self->fill_in_string(
         $self->MakeFile_PL_template,
         {
-            dist              => \($self->zilla),
-            plugin            => \$self,
-            eumm_version      => \($self->eumm_version),
-            perl_prereq       => \$perl_prereq,
-            share_dir_block   => [ $self->share_dir_block ],
-            fallback_prereqs  => \($self->fallback_prereq_pm),
-            WriteMakefileArgs => \($self->WriteMakefile_dump),
+            dist               => \($self->zilla),
+            plugin             => \$self,
+            eumm_version       => \($self->eumm_version),
+            perl_prereq        => \$perl_prereq,
+            share_dir_block    => [ $self->share_dir_block ],
+            fallback_prereqs   => \($self->fallback_prereq_pm),
+            WriteMakefileArgs  => \($self->WriteMakefile_dump),
+            makefile_args_hook => \($self->makefile_args_hook),
         },
     );
 
@@ -380,7 +395,7 @@ And another example from L<re::engine::Plan9>:
     __PACKAGE__->meta->make_immutable;
 
 If you have custom code in your L<ExtUtils::MakeMaker>-based
-L<Makefile.PL> that L<Dist::Zilla> can't replace via its default
+F<Makefile.PL> that L<Dist::Zilla> can't replace via its default
 facilities you'll be able replace it by using this module.
 
 Even if your F<Makefile.PL> isn't L<ExtUtils::MakeMaker>-based you
@@ -426,6 +441,21 @@ Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
+=head2 _build_makefile_args_hook
+
+Constructs a C<Str> that will be included in the F<Makefile.PL> after
+filling C<%WriteMakefileArgs> hash.
+
+This allow to insert configuration code for modify L<ExtUtils::MakeMaker>
+arguments, like this:
+
+    override _build_makefile_args_hook => sub {
+        return <<'END';
+        $WriteMakefileArgs{CCFLAGS} = `pkg-config --cflags libpng`;
+        $WriteMakefileArgs{LIBS} = [`pkg-config --libs libpng`];
+    END
+    };
+
 =head2 test_dirs
 
 =head2 exe_files
@@ -458,7 +488,7 @@ Dist::Zilla roles, check the source for more info.
 
 =over
 
-=item attempt to add Makefile.PL multiple times
+=item attempt to add F<Makefile.PL> multiple times
 
 This error from L<Dist::Zilla> means that you've used both
 C<[MakeMaker]> and C<[MakeMaker::Awesome]>. You've either included
