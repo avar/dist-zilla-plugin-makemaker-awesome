@@ -69,7 +69,7 @@ has WriteMakefile_args => (
     },
     lazy          => 1,
     builder       => '_build_WriteMakefile_args',
-    documentation => "The arguments passed to ExtUtil::MakeMaker's WriteMakefile()",
+    documentation => "The arguments passed to ExtUtils::MakeMaker's WriteMakefile()",
 );
 
 sub _build_WriteMakefile_args {
@@ -149,7 +149,7 @@ has test_dirs => (
     auto_deref    => 1,
     lazy          => 1,
     builder       => '_build_test_dirs',
-    documentation => "The test directories given to ExtUtil::MakeMaker's test (in munged form)",
+    documentation => "The glob paths given to the C<< test => { TESTS => ... } >> parameter for ExtUtils::MakeMaker's WriteMakefile() (in munged form)",
 );
 
 sub _build_test_dirs {
@@ -172,7 +172,7 @@ has exe_files => (
     auto_deref    => 1,
     lazy          => 1,
     builder       => '_build_exe_files',
-    documentation => "The test directories given to ExtUtil::MakeMaker's EXE_FILES (in munged form)",
+    documentation => "The test directories given to ExtUtils::MakeMaker's EXE_FILES (in munged form)",
 );
 
 sub _build_exe_files {
@@ -435,9 +435,17 @@ Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
-=head3 test_dirs
+=head3 _build_test_dirs
 
-=head3 exe_files
+The glob paths given to the C<< test => { TESTS => ... } >> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.  Defaults to F<.t> files under F<t/>.
+B<NOT> directories, despite the name.
+
+=head3 _build_exe_files
+
+The files given to the C<EXE_FILES> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.
+Defaults to using data from C<:ExecDir> plugins.
 
 =head3 register_prereqs
 
