@@ -293,8 +293,13 @@ limited, if you want to stray from the marked path and do something
 that would normally be done in a C<package MY> section or otherwise
 run custom code in your F<Makefile.PL> you're out of luck.
 
-This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker>,
-so if you need something more complex you can just subclass it.
+This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker> -- we
+add additional customization hooks by subclassing it.
+
+=head1 SUBCLASSING
+
+You can further customize the content of F<Makefile.PL> by subclassing this plugin,
+L<Dist::Zilla::Plugin::MakeMaker::Awesome>.
 
 As an example, adding a C<package MY> section to your
 F<Makefile.PL>:
@@ -353,7 +358,8 @@ in L<re::engine::PCRE>:
 
     __PACKAGE__->meta->make_immutable;
 
-And another example from L<re::engine::Plan9>:
+And another example from L<re::engine::Plan9>, which determines the arguments
+dynamically at build time:
 
     package inc::Plan9MakeMaker;
     use Moose;
@@ -382,20 +388,22 @@ And another example from L<re::engine::Plan9>:
 
 If you have custom code in your L<ExtUtils::MakeMaker>-based
 F<Makefile.PL> that L<Dist::Zilla> can't replace via its default
-facilities you'll be able replace it by using this module.
+facilities you'll be able to replace it by using this module.
 
 Even if your F<Makefile.PL> isn't L<ExtUtils::MakeMaker>-based you
 should be able to override it. You'll just have to provide a new
 L</"_build_MakeFile_PL_template">.
 
-=head1 OVERRIDE
+=for stopwords overridable
+
+=head2 OVERRIDABLE METHODS
 
 These are the methods you can currently C<override> or method-modify in your
 custom F<inc/> module. The work that this module does is entirely done in
 small modular methods that can be overridden in your subclass. Here are
 some of the highlights:
 
-=head2 _build_MakeFile_PL_template
+=head3 _build_MakeFile_PL_template
 
 Returns a L<Text::Template> string used to construct the F<Makefile.PL>.
 
@@ -416,31 +424,31 @@ C<around> method modifier, something like this:
         return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
     };
 
-=head2 _build_WriteMakefile_args
+=head3 _build_WriteMakefile_args
 
 A C<HashRef> of arguments that will be passed to
 L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
 
-=head2 _build_WriteMakefile_dump
+=head3 _build_WriteMakefile_dump
 
 Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
-=head2 test_dirs
+=head3 test_dirs
 
-=head2 exe_files
+=head3 exe_files
 
-=head2 register_prereqs
+=head3 register_prereqs
 
-=head2 setup_installer
+=head3 setup_installer
 
 =for stopwords dirs
 
 The test/bin/share dirs and exe_files. These will all be passed to
 F</"_build_WriteMakefile_args"> later.
 
-=head2 _build_share_dir_block
+=head3 _build_share_dir_block
 
 =for stopwords sharedir
 
