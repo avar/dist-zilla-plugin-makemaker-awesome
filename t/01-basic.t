@@ -1,8 +1,8 @@
 use strict;
 use warnings;
+
 use Test::More 0.88;
 use Test::Deep;
-
 use Test::DZil;
 use Path::Tiny;
 
@@ -65,27 +65,6 @@ use Path::Tiny;
     qr/(?{ quotemeta($tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs')) })/,
     'arguments are dumped to Makefile.PL',
   );
-}
-
-{
-  my $tzil = Builder->from_config(
-    { dist_root => 'corpus/dist/DZT' },
-    {
-      add_files => {
-        path(qw(source dist.ini)) => simple_ini(
-          'GatherDir',
-          'MakeMaker',
-          [ Prereqs => { perl => '5.8.1' } ],
-        ),
-      },
-    },
-  );
-
-  $tzil->build;
-
-  my $content = $tzil->slurp_file('build/Makefile.PL');
-
-  like($content, qr/^use 5\.008001;\s*$/m, "normalized the perl version needed");
 }
 
 done_testing;
