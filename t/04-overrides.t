@@ -24,9 +24,9 @@ use File::pushd 'pushd';
         my $orig = shift; my $self = shift;
         return $self->$orig(@_) . "\n# in WriteMakefile_dump\n"
     };
-    around _build_test_dirs => sub {
+    around _build_test_files => sub {
         my $orig = shift; my $self = shift;
-        return +{ %{ $self->$orig(@_) }, 'xt/*.t' => 1 }
+        return [ @{ $self->$orig(@_) }, 'xt/*.t' ]
     };
     around _build_exe_files => sub {
         my $orig = shift; my $self = shift;
@@ -75,7 +75,7 @@ like(
 like(
     $content,
     qr{^\s+"TESTS"\s+=>\s+\Q"t/*.t xt/*.t"\E}ms,
-    '_build_test_dirs hook called',
+    '_build_test_files hook called',
 );
 like(
     $content,

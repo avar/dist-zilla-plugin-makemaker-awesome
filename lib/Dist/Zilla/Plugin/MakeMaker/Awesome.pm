@@ -76,7 +76,7 @@ sub _build_WriteMakefile_args {
     my ($self) = @_;
 
     (my $name = $self->zilla->name) =~ s/-/::/g;
-    my $test_dirs = $self->test_dirs;
+    my $test_files = $self->test_files;
 
     my $prereqs = $self->zilla->prereqs;
     my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
@@ -117,7 +117,7 @@ sub _build_WriteMakefile_args {
         TEST_REQUIRES      => $test_prereq,
         PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
-        test => { TESTS => join q{ }, sort keys %$test_dirs },
+        test => { TESTS => join q{ }, sort @$test_files },
 
         $perl_prereq ? ( MIN_PERL_VERSION => $perl_prereq ) : (),
     );
@@ -143,27 +143,26 @@ sub _build_WriteMakefile_dump {
     return $self->_dump_as(\%write_makefile_args, '*WriteMakefileArgs');
 }
 
-has test_dirs => (
+has test_files => (
     is            => 'ro',
-    isa           => HashRef[Str],
-    auto_deref    => 1,
+    isa           => ArrayRef[Str],
     lazy          => 1,
-    builder       => '_build_test_dirs',
+    builder       => '_build_test_files',
     documentation => "The glob paths given to the C<< test => { TESTS => ... } >> parameter for ExtUtils::MakeMaker's WriteMakefile() (in munged form)",
 );
 
-sub _build_test_dirs {
+sub _build_test_files {
     my ($self) = @_;
 
-    my %test_dirs;
+    my %test_files;
     for my $file ($self->zilla->files->flatten) {
         next unless $file->name =~ m{\At/.+\.t\z};
-        (my $dir = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
+        (my $pattern = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
 
-        $test_dirs{ $dir } = 1;
+        $test_files{$pattern} = 1;
     }
 
-    return \%test_dirs;
+    return [ keys %test_files ];
 }
 
 has exe_files => (
@@ -435,7 +434,7 @@ Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
-=head3 _build_test_dirs
+=head3 _build_test_files
 
 The glob paths given to the C<< test => { TESTS => ... } >> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>.  Defaults to F<.t> files under F<t/>.

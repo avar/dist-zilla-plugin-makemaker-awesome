@@ -23,6 +23,7 @@ use File::pushd 'pushd';
         ),
         path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
         path(qw(source t basic.t)) => 'warn "here is a test";',
+        path(qw(source t more.t)) => 'warn "here is another test";',
       },
     },
   );

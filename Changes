@@ -1,6 +1,10 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - *INCOMPATIBLE CHANGE*: the 'test_dirs' sub and '_build_test_dirs' method
+      have been renamed to 'test_files' and '_build_test_files' respectively,
+      and deal with arrayrefs rather than hashrefs, to more properly reflect
+      the format of their values
 
 0.20      2014-02-05 05:05:05Z
     - fixed outdated prereq on Dist::Zilla::Plugin::MakeMaker (now requiring
