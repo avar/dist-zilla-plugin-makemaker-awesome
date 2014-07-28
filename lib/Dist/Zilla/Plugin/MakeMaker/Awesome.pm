@@ -11,6 +11,15 @@ use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
 extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 
+sub mvp_multivalue_args { qw(test_files exe_files) }
+
+sub mvp_aliases {
+    +{
+        test_file => 'test_files',
+        exe_file => 'exe_files',
+    }
+}
+
 has MakeFile_PL_template => (
     is            => 'ro',
     isa           => Stringlike,
@@ -110,7 +119,7 @@ sub _build_WriteMakefile_args {
         ABSTRACT  => $self->zilla->abstract,
         VERSION   => $self->zilla->version,
         LICENSE   => $self->zilla->license->meta_yml_name,
-        EXE_FILES => [ $self->exe_files ],
+        EXE_FILES => $self->exe_files,
 
         CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
         BUILD_REQUIRES     => $build_prereq,
@@ -168,7 +177,6 @@ sub _build_test_files {
 has exe_files => (
     is            => 'ro',
     isa           => ArrayRef[Str],
-    auto_deref    => 1,
     lazy          => 1,
     builder       => '_build_exe_files',
     documentation => "The test directories given to ExtUtils::MakeMaker's EXE_FILES (in munged form)",
@@ -245,7 +253,7 @@ sub setup_installer {
 
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
-        if grep { /\s/ } $self->exe_files;
+        if grep { /\s/ } @{$self->exe_files};
 
     my $perl_prereq = $self->delete_WriteMakefile_arg('MIN_PERL_VERSION');
 
@@ -294,6 +302,25 @@ run custom code in your F<Makefile.PL> you're out of luck.
 
 This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker> -- we
 add additional customization hooks by subclassing it.
+
+=head1 CONFIGURATION OPTIONS
+
+Many features can be accessed directly via F<dist.ini>, by setting options.
+For options where you expect a multi-line string to be inserted into
+F<Makefile.PL>, use the config option more than once, setting each line
+separately.
+
+=head2 test_file
+
+A glob path given to the C<< test => { TESTS => ... } >> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
+Defaults to F<.t> files under F<t/>.  B<NOT> a directory name, despite the name.
+
+=head2 exe_file
+
+The file given to the C<EXE_FILES> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
+Defaults to using data from C<:ExecDir> plugins.
 
 =head1 SUBCLASSING
 
@@ -401,6 +428,8 @@ These are the methods you can currently C<override> or method-modify in your
 custom F<inc/> module. The work that this module does is entirely done in
 small modular methods that can be overridden in your subclass. Here are
 some of the highlights:
+
+=for Pod::Coverage mvp_multivalue_args mvp_aliases
 
 =head3 _build_MakeFile_PL_template
 
