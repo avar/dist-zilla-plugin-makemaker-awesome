@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.21      2014-07-28 04:00:35Z
     - *INCOMPATIBLE CHANGE*: the 'test_dirs' sub and '_build_test_dirs' method
       have been renamed to 'test_files' and '_build_test_files' respectively,
       and deal with arrayrefs rather than hashrefs, to more properly reflect

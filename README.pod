@@ -1,0 +1,311 @@
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<Dist::Zilla>
+
+=head1 VERSION
+
+version 0.21
+
+=head1 SYNOPSIS
+
+In your F<dist.ini>:
+
+    [MakeMaker::Awesome]
+    WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
+    WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
+
+or:
+
+    ;; Replace [MakeMaker]
+    ;[MakeMaker]
+    [=inc::MyMakeMaker]
+
+=head1 DESCRIPTION
+
+L<Dist::Zilla>'s L<MakeMaker|Dist::Zilla::Plugin::MakeMaker> plugin is
+limited, if you want to stray from the marked path and do something
+that would normally be done in a C<package MY> section or otherwise
+run custom code in your F<Makefile.PL> you're out of luck.
+
+This plugin is 100% compatible with L<Dist::Zilla::Plugin::MakeMaker> -- we
+add additional customization hooks by subclassing it.
+
+=head1 CONFIGURATION OPTIONS
+
+Many features can be accessed directly via F<dist.ini>, by setting options.
+For options where you expect a multi-line string to be inserted into
+F<Makefile.PL>, use the config option more than once, setting each line
+separately.
+
+=head2 WriteMakefile_arg
+
+A string, which evaluates to an even-numbered list, which will be included in the call to
+C<WriteMakefile>.  Any code is legal that can be inserted into a list of other
+key-value pairs, for example:
+
+    [MakeMaker::Awesome]
+    WriteMakefile_arg = ( $^O eq 'solaris' ? ( CCFLAGS => '-Wall' ) : ())
+
+Can be used more than once.
+
+=for stopwords DynamicPrereqs
+
+Note: you (intentionally) cannot use this mechanism for specifying dynamic
+prerequisites, as previous occurrences of a top-level key will be overwritten
+(additionally, you cannot set the fallback prereqs from here). You should take
+a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
+
+=head2 test_file
+
+A glob path given to the C<< test => { TESTS => ... } >> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
+Defaults to F<.t> files under F<t/>.  B<NOT> a directory name, despite the name.
+
+=head2 exe_file
+
+The file given to the C<EXE_FILES> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
+Defaults to using data from C<:ExecDir> plugins.
+
+=head1 SUBCLASSING
+
+You can further customize the content of F<Makefile.PL> by subclassing this plugin,
+L<Dist::Zilla::Plugin::MakeMaker::Awesome>.
+
+As an example, adding a C<package MY> section to your
+F<Makefile.PL>:
+
+In your F<dist.ini>:
+
+    [=inc::MyDistMakeMaker / MyDistMakeMaker]
+
+Then in your F<inc/MyDistMakeMaker.pm>, real example from L<Hailo>
+(which has C<[=inc::HailoMakeMaker / HailoMakeMaker]> in its
+F<dist.ini>):
+
+    package inc::HailoMakeMaker;
+    use Moose;
+
+    extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+
+    override _build_MakeFile_PL_template => sub {
+        my ($self) = @_;
+        my $template = super();
+
+        $template .= <<'TEMPLATE';
+    package MY;
+
+    sub test {
+        my $inherited = shift->SUPER::test(@_);
+
+        # Run tests with Moose and Mouse
+        $inherited =~ s/^test_dynamic :: pure_all\n\t(.*?)\n/test_dynamic :: pure_all\n\tANY_MOOSE=Mouse $1\n\tANY_MOOSE=Moose $1\n/m;
+
+        return $inherited;
+    }
+    TEMPLATE
+
+        return $template;
+    };
+
+    __PACKAGE__->meta->make_immutable;
+
+=for stopwords distro
+
+Or maybe you're writing an XS distro and want to pass custom arguments
+to C<WriteMakefile()>, here's an example of adding a C<LIBS> argument
+in L<re::engine::PCRE> (note that you can also achieve this without
+subclassing, by passing the L</WriteMakefile_arg> option):
+
+    package inc::PCREMakeMaker;
+    use Moose;
+
+    extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+
+    override _build_WriteMakefile_args => sub { +{
+        # Add LIBS => to WriteMakefile() args
+        %{ super() },
+        LIBS => [ '-lpcre' ],
+    } };
+
+    __PACKAGE__->meta->make_immutable;
+
+And another example from L<re::engine::Plan9>, which determines the arguments
+dynamically at build time:
+
+    package inc::Plan9MakeMaker;
+    use Moose;
+
+    extends 'Dist::Zilla::Plugin::MakeMaker::Awesome';
+
+    override _build_WriteMakefile_args => sub {
+        my ($self) = @_;
+
+        our @DIR = qw(libutf libfmt libregexp);
+        our @OBJ = map { s/\.c$/.o/; $_ }
+                   grep { ! /test/ }
+                   glob "lib*/*.c";
+
+        return +{
+            %{ super() },
+            DIR           => [ @DIR ],
+            INC           => join(' ', map { "-I$_" } @DIR),
+
+            # This used to be '-shared lib*/*.o' but that doesn't work on Win32
+            LDDLFLAGS     => "-shared @OBJ",
+        };
+    };
+
+    __PACKAGE__->meta->make_immutable;
+
+If you have custom code in your L<ExtUtils::MakeMaker>-based
+F<Makefile.PL> that L<Dist::Zilla> can't replace via its default
+facilities you'll be able to replace it by using this module.
+
+Even if your F<Makefile.PL> isn't L<ExtUtils::MakeMaker>-based you
+should be able to override it. You'll just have to provide a new
+L</"_build_MakeFile_PL_template">.
+
+=for stopwords overridable
+
+=head2 OVERRIDABLE METHODS
+
+These are the methods you can currently C<override> or method-modify in your
+custom F<inc/> module. The work that this module does is entirely done in
+small modular methods that can be overridden in your subclass. Here are
+some of the highlights:
+
+=for Pod::Coverage mvp_multivalue_args mvp_aliases
+
+=head3 _build_MakeFile_PL_template
+
+Returns a L<Text::Template> string used to construct the F<Makefile.PL>.
+
+If you need to insert some additional code to the beginning or end of
+F<Makefile.PL> (without modifying the existing content, you should use an
+C<around> method modifier, something like this:
+
+    around _build_MakeFile_PL_template => sub {
+        my $orig = shift;
+        my $self = shift;
+
+        my $NEW_CONTENT = ...;
+
+        # insert new content near the beginning of the file, preserving the
+        # preamble header
+        my $string = $self->$orig(@_);
+        $string =~ m/use warnings;\n\n/g;
+        return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
+    };
+
+=head3 _build_WriteMakefile_args
+
+A C<HashRef> of arguments that will be passed to
+L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
+
+=head3 _build_WriteMakefile_dump
+
+Takes the return value of L</"_build_WriteMakefile_args"> and
+constructs a L<Str> that will be included in the F<Makefile.PL> by
+L</"_build_MakeFile_PL_template">.
+
+=head3 _build_test_files
+
+The glob paths given to the C<< test => { TESTS => ... } >> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.  Defaults to F<.t> files under F<t/>.
+B<NOT> directories, despite the name.
+
+=head3 _build_exe_files
+
+The files given to the C<EXE_FILES> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.
+Defaults to using data from C<:ExecDir> plugins.
+
+=head3 register_prereqs
+
+=head3 setup_installer
+
+=for stopwords dirs
+
+The test/bin/share dirs and exe_files. These will all be passed to
+F</"_build_WriteMakefile_args"> later.
+
+=head3 _build_share_dir_block
+
+=for stopwords sharedir
+
+An C<ArrayRef[Str]> with two elements to be used by
+L</"_build_MakeFile_PL_template">. The first will declare your
+L<sharedir|File::ShareDir::Install> and the second will add a magic
+C<package MY> section to install it. Deep magic.
+
+=head2 OTHER
+
+The main entry point is C<setup_installer> via the
+L<Dist::Zilla::Role::InstallTool> role. There are also other magic
+Dist::Zilla roles, check the source for more info.
+
+=head1 DIAGNOSTICS
+
+=over
+
+=item attempt to add F<Makefile.PL> multiple times
+
+This error from L<Dist::Zilla> means that you've used both
+C<[MakeMaker]> and C<[MakeMaker::Awesome]>. You've either included
+C<MakeMaker> directly in F<dist.ini>, or you have plugin bundle that
+includes it. See L<@Filter|Dist::Zilla::PluginBundle::Filter> for how
+to filter it out.
+
+=back
+
+=head1 BUGS
+
+=for stopwords INI
+
+This plugin would suck less if L<Dist::Zilla> didn't use a INI-based
+config system so you could add a stuff like this in your main
+configuration file like you can with L<Module::Install>.
+
+The F<.ini> file format can only support key-value pairs whereas any
+complex use of L<ExtUtils::MakeMaker> requires running custom Perl
+code and passing complex data structures to C<WriteMakefile>.
+
+=head1 AUTHOR
+
+Ævar Arnfjörð Bjarmason <avar@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2014 by Ævar Arnfjörð Bjarmason.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 CONTRIBUTORS
+
+=over 4
+
+=item *
+
+Jesse Luehrs <doy@tozt.net>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=item *
+
+Robin Smidsrød <robin@smidsrod.no>
+
+=item *
+
+Vladimir Timofeev <vovkasm@gmail.com>
+
+=back
+
+=cut
