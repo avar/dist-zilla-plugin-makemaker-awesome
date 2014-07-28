@@ -4,6 +4,8 @@ use warnings;
 use Test::More 0.88;
 use Test::DZil;
 use Path::Tiny;
+use Test::Fatal;
+use File::pushd 'pushd';
 
 {
     package My::MakeMaker;
@@ -80,5 +82,15 @@ like(
     qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}ms,
     '_build_exe_files hook called',
 );
+
+subtest 'run the generated Makefile.PL' => sub
+{
+    my $wd = pushd path($tzil->tempdir)->child('build');
+    is(
+        exception { $tzil->plugin_named('=My::MakeMaker')->build },
+        undef,
+        'Makefile.PL can be run successfully',
+    );
+};
 
 done_testing;

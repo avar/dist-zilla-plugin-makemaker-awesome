@@ -5,6 +5,8 @@ use Test::More 0.88;
 use Test::Deep;
 use Test::DZil;
 use Path::Tiny;
+use Test::Fatal;
+use File::pushd 'pushd';
 
 {
   my $tzil = Builder->from_config(
@@ -65,6 +67,16 @@ use Path::Tiny;
     qr/(?{ quotemeta($tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs')) })/,
     'arguments are dumped to Makefile.PL',
   );
+
+  subtest 'run the generated Makefile.PL' => sub
+  {
+      my $wd = pushd path($tzil->tempdir)->child('build');
+      is(
+          exception { $makemaker->build },
+          undef,
+          'Makefile.PL can be run successfully',
+      );
+  };
 }
 
 done_testing;
