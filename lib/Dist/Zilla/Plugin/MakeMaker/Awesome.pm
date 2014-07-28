@@ -11,10 +11,11 @@ use CPAN::Meta::Requirements 2.121; # requirements_for_module
 
 extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 
-sub mvp_multivalue_args { qw(test_files exe_files) }
+sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files) }
 
 sub mvp_aliases {
     +{
+        WriteMakefile_arg => 'WriteMakefile_arg_strs',
         test_file => 'test_files',
         exe_file => 'exe_files',
     }
@@ -48,7 +49,12 @@ use ExtUtils::MakeMaker {{ $eumm_version }};
 {{ $share_dir_block[0] }}
 
 my {{ $WriteMakefileArgs }}
-
+{{
+    @$extra_args ? "%WriteMakefileArgs = (\n"
+        . join('', map { "    " . $_ . ",\n" } '%WriteMakefileArgs', @$extra_args)
+        . ");\n"
+    : '';
+}}
 my {{ $fallback_prereqs }}
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
@@ -68,6 +74,14 @@ TEMPLATE
 
   return $template;
 }
+
+has WriteMakefile_arg_strs => (
+    is => 'ro', isa => ArrayRef[Str],
+    traits => ['Array'],
+    lazy => 1,
+    default => sub { [] },
+    documentation => "Additional arguments passed to ExtUtils::MakeMaker's WriteMakefile()",
+);
 
 has WriteMakefile_args => (
     isa           => HashRef,
@@ -106,7 +120,7 @@ sub _build_WriteMakefile_args {
         ->clear_requirement('perl')
         ->as_string_hash;
 
-      my $test_prereq
+    my $test_prereq
         = $prereqs->requirements_for(qw(test requires))
         ->clone
         ->clear_requirement('perl')
@@ -267,6 +281,7 @@ sub setup_installer {
             share_dir_block   => [ $self->share_dir_block ],
             fallback_prereqs  => \($self->fallback_prereq_pm),
             WriteMakefileArgs => \($self->WriteMakefile_dump),
+            extra_args        => \($self->WriteMakefile_arg_strs),
         },
     );
 
@@ -289,6 +304,12 @@ __END__
 
 In your F<dist.ini>:
 
+    [MakeMaker::Awesome]
+    WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
+    WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
+
+or:
+
     ;; Replace [MakeMaker]
     ;[MakeMaker]
     [=inc::MyMakeMaker]
@@ -309,6 +330,24 @@ Many features can be accessed directly via F<dist.ini>, by setting options.
 For options where you expect a multi-line string to be inserted into
 F<Makefile.PL>, use the config option more than once, setting each line
 separately.
+
+=head2 WriteMakefile_arg
+
+A string, which evaluates to an even-numbered list, which will be included in the call to
+C<WriteMakefile>.  Any code is legal that can be inserted into a list of other
+key-value pairs, for example:
+
+    [MakeMaker::Awesome]
+    WriteMakefile_arg = ( $^O eq 'solaris' ? ( CCFLAGS => '-Wall' ) : ())
+
+Can be used more than once.
+
+=for stopwords DynamicPrereqs
+
+Note: you (intentionally) cannot use this mechanism for specifying dynamic
+prerequisites, as previous occurrences of a top-level key will be overwritten
+(additionally, you cannot set the fallback prereqs from here). You should take
+a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 
 =head2 test_file
 
@@ -369,7 +408,8 @@ F<dist.ini>):
 
 Or maybe you're writing an XS distro and want to pass custom arguments
 to C<WriteMakefile()>, here's an example of adding a C<LIBS> argument
-in L<re::engine::PCRE>:
+in L<re::engine::PCRE> (note that you can also achieve this without
+subclassing, by passing the L</WriteMakefile_arg> option):
 
     package inc::PCREMakeMaker;
     use Moose;

@@ -5,8 +5,8 @@ Revision history for {{ $dist->name }}
       have been renamed to 'test_files' and '_build_test_files' respectively,
       and deal with arrayrefs rather than hashrefs, to more properly reflect
       the format of their values
-    - add new 'test_file', 'exe_file' options, to allow for simple use without
-      needing to subclass this plugin
+    - add new 'WriteMakefile_arg', 'test_file', 'exe_file' options, to allow
+      for simple use without needing to subclass this plugin
 
 0.20      2014-02-05 05:05:05Z
     - fixed outdated prereq on Dist::Zilla::Plugin::MakeMaker (now requiring

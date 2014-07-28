@@ -29,6 +29,7 @@ my $tzil = Builder->from_config(
             ) . <<END_INI,
 
 [MakeMaker::Awesome]
+WriteMakefile_arg = CCFLAGS => 'Wall'
 test_file = xt/*.t
 exe_file = bin/hello-world
 END_INI
@@ -52,6 +53,11 @@ like(
     $content,
     qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}ms,
     'exe files were set',
+);
+like(
+    $content,
+    qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => 'Wall',\n^\);\n/ms,
+    'additional WriteMakefile argument is set',
 );
 
 subtest 'run the generated Makefile.PL' => sub
