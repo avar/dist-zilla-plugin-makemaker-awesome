@@ -29,7 +29,7 @@ my $tzil = Builder->from_config(
             ) . <<END_INI,
 
 [MakeMaker::Awesome]
-WriteMakefile_arg = CCFLAGS => 'Wall'
+WriteMakefile_arg = CCFLAGS => '-Wall'
 test_file = xt/*.t
 exe_file = bin/hello-world
 END_INI
@@ -56,7 +56,7 @@ like(
 );
 like(
     $content,
-    qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => 'Wall',\n^\);\n/ms,
+    qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => '-Wall',\n^\);\n/ms,
     'additional WriteMakefile argument is set',
 );
 
