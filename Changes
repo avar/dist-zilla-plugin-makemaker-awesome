@@ -3,6 +3,7 @@ Revision history for {{ $dist->name }}
 {{$NEXT}}
     - fix for Dist::Zilla::Plugin::MakeMaker 5.020 dropping a default required
       version for ExtUtils::MakeMaker
+    - now omitting BUILD_REQUIRES, TEST_REQUIRES in Makefile.PL when empty
 
 0.21      2014-07-28 04:00:35Z
     - *INCOMPATIBLE CHANGE*: the 'test_dirs' sub and '_build_test_dirs' method

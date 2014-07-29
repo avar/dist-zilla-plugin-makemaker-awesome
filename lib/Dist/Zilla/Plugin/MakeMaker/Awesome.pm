@@ -127,8 +127,8 @@ sub _build_WriteMakefile_args {
         EXE_FILES => $self->exe_files,
 
         CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
-        BUILD_REQUIRES     => $build_prereq,
-        TEST_REQUIRES      => $test_prereq,
+        keys %$build_prereq ? ( BUILD_REQUIRES => $build_prereq ) : (),
+        keys %$test_prereq ? ( TEST_REQUIRES => $test_prereq ) : (),
         PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
 
         test => { TESTS => join q{ }, sort @$test_files },
