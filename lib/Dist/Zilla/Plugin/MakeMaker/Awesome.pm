@@ -114,17 +114,8 @@ sub _build_WriteMakefile_args {
         ->as_string_hash;
     };
 
-    my $build_prereq
-        = $prereqs->requirements_for(qw(build requires))
-        ->clone
-        ->clear_requirement('perl')
-        ->as_string_hash;
-
-    my $test_prereq
-        = $prereqs->requirements_for(qw(test requires))
-        ->clone
-        ->clear_requirement('perl')
-        ->as_string_hash;
+    my $build_prereq = $prereqs_dump->(qw(build requires));
+    my $test_prereq = $prereqs_dump->(qw(test requires));
 
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
