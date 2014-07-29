@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - fix for Dist::Zilla::Plugin::MakeMaker 5.020 dropping a default required
+      version for ExtUtils::MakeMaker
 
 0.21      2014-07-28 04:00:35Z
     - *INCOMPATIBLE CHANGE*: the 'test_dirs' sub and '_build_test_dirs' method

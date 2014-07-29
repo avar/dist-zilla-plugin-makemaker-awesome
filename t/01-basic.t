@@ -15,7 +15,7 @@ use File::pushd 'pushd';
       add_files => {
         path(qw(source dist.ini)) => simple_ini(
           'GatherDir',
-          'MakeMaker::Awesome',
+          [ 'MakeMaker::Awesome' => { eumm_version => '6.00' } ],
           [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
           [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
           [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
@@ -50,7 +50,7 @@ use File::pushd 'pushd';
       'Test::Deet'   => '7',
     },
     CONFIGURE_REQUIRES => {
-      'ExtUtils::MakeMaker' => '6.30'
+      'ExtUtils::MakeMaker' => '6.00'
     },
     EXE_FILES => [],
     test => { TESTS => 't/*.t' },

@@ -44,7 +44,7 @@ use warnings;
 
 {{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
 
-use ExtUtils::MakeMaker {{ $eumm_version }};
+use ExtUtils::MakeMaker{{ defined $eumm_version ? ' ' . $eumm_version : '' }};
 
 {{ $share_dir_block[0] }}
 
@@ -249,7 +249,7 @@ sub register_prereqs {
 
     $self->zilla->register_prereqs(
         { phase => 'configure' },
-        'ExtUtils::MakeMaker' => $self->eumm_version,
+        'ExtUtils::MakeMaker' => $self->eumm_version || 0,
     );
 
     return unless keys %{ $self->zilla->_share_dir_map };
