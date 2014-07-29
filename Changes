@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.22      2014-07-29 04:51:13Z
     - fix for Dist::Zilla::Plugin::MakeMaker 5.020 dropping a default required
       version for ExtUtils::MakeMaker
     - now omitting BUILD_REQUIRES, TEST_REQUIRES in Makefile.PL when empty
