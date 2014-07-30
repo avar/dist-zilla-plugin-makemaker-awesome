@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - create Makefile.PL at filegatherer phase, to allow other plugins to see
+      the file earlier
 
 0.22      2014-07-29 04:51:13Z
     - fix for Dist::Zilla::Plugin::MakeMaker 5.020 dropping a default required
