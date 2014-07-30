@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.23      2014-07-30 02:37:52Z
     - create Makefile.PL at filegatherer phase, to allow other plugins to see
       the file earlier
 
