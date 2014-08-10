@@ -8,31 +8,30 @@ use Path::Tiny;
 use Test::Fatal;
 use File::pushd 'pushd';
 
-{
-  my $tzil = Builder->from_config(
+my $tzil = Builder->from_config(
     { dist_root => 'does_not_exist' },
     {
-      add_files => {
-        path(qw(source dist.ini)) => simple_ini(
-          'GatherDir',
-          [ 'MakeMaker::Awesome' => { eumm_version => '6.00' } ],
-          [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
-          [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
-          [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
-                                          perl           => '5.008' } ],
-        ),
-        path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
-        path(qw(source t basic.t)) => 'warn "here is a test";',
-        path(qw(source t more.t)) => 'warn "here is another test";',
-      },
+        add_files => {
+            path(qw(source dist.ini)) => simple_ini(
+                'GatherDir',
+                [ 'MakeMaker::Awesome' => { eumm_version => '6.00' } ],
+                [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
+                [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
+                [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
+                                                perl           => '5.008' } ],
+            ),
+            path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
+            path(qw(source t basic.t)) => 'warn "here is a test";',
+            path(qw(source t more.t)) => 'warn "here is another test";',
+        },
     },
-  );
+);
 
-  $tzil->build;
+$tzil->build;
 
-  my $makemaker = $tzil->plugin_named('MakeMaker::Awesome');
+my $makemaker = $tzil->plugin_named('MakeMaker::Awesome');
 
-  my %want = (
+my %want = (
     DISTNAME => 'DZT-Sample',
     NAME     => 'DZT::Sample',
     ABSTRACT => 'Sample DZ Dist',
@@ -41,43 +40,42 @@ use File::pushd 'pushd';
     LICENSE  => 'perl',
 
     PREREQ_PM          => {
-      'Foo::Bar' => '1.20'
+        'Foo::Bar' => '1.20'
     },
     BUILD_REQUIRES     => {
-      'Builder::Bob' => '9.901',
+        'Builder::Bob' => '9.901',
     },
     TEST_REQUIRES      => {
-      'Test::Deet'   => '7',
+        'Test::Deet'   => '7',
     },
     CONFIGURE_REQUIRES => {
-      'ExtUtils::MakeMaker' => '6.00'
+        'ExtUtils::MakeMaker' => '6.00'
     },
     EXE_FILES => [],
     test => { TESTS => 't/*.t' },
   );
 
-  cmp_deeply(
+cmp_deeply(
     { $makemaker->WriteMakefile_args },
     \%want,
     'correct makemaker args generated',
-  );
+);
 
-  my $content = $tzil->slurp_file('build/Makefile.PL');
-  like(
+my $content = $tzil->slurp_file('build/Makefile.PL');
+like(
     $content,
     qr/(?{ quotemeta($tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs')) })/,
     'arguments are dumped to Makefile.PL',
-  );
+);
 
-  subtest 'run the generated Makefile.PL' => sub
-  {
-      my $wd = pushd path($tzil->tempdir)->child('build');
-      is(
-          exception { $makemaker->build },
-          undef,
-          'Makefile.PL can be run successfully',
-      );
-  };
-}
+subtest 'run the generated Makefile.PL' => sub
+{
+    my $wd = pushd path($tzil->tempdir)->child('build');
+    is(
+        exception { $makemaker->build },
+        undef,
+        'Makefile.PL can be run successfully',
+    );
+};
 
 done_testing;
