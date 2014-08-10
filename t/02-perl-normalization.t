@@ -18,10 +18,14 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
 
 my $content = $tzil->slurp_file('build/Makefile.PL');
 
 like($content, qr/^use 5\.008001;\s*$/m, "normalized the perl version needed");
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;

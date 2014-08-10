@@ -27,6 +27,7 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
 
 my $makemaker = $tzil->plugin_named('MakeMaker::Awesome');
@@ -77,5 +78,8 @@ subtest 'run the generated Makefile.PL' => sub
         'Makefile.PL can be run successfully',
     );
 };
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;

@@ -51,6 +51,7 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
 
 # this isn't that great of a test... would be nice to do more sophisticated
@@ -92,5 +93,8 @@ subtest 'run the generated Makefile.PL' => sub
         'Makefile.PL can be run successfully',
     );
 };
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;

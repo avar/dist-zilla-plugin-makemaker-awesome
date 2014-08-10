@@ -21,6 +21,7 @@ my $tzil = Builder->from_config(
     },
 );
 
+$tzil->chrome->logger->set_debug(1);
 $tzil->build;
 
 cmp_deeply(
@@ -44,5 +45,8 @@ cmp_deeply(
     'config is properly included in metadata',
 )
     or diag 'got distmeta: ', explain $tzil->distmeta;
+
+diag 'got log messages: ', explain $tzil->log_messages
+    if not Test::Builder->new->is_passing;
 
 done_testing;
