@@ -1,6 +1,9 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - add x_breaks metadata, and a test that checks it, for
+      [MakeMaker::Fallback] versions that we broke with our changes to
+      eumm_version handling
 
 0.23      2014-07-30 02:37:52Z
     - create Makefile.PL at filegatherer phase, to allow other plugins to see
