@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.24      2014-08-14 02:07:13Z
     - add x_breaks metadata, and a test that checks it, for
       [MakeMaker::Fallback] versions that we broke with our changes to
       eumm_version handling
