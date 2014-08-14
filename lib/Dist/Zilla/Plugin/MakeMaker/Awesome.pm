@@ -274,6 +274,8 @@ sub setup_installer
 {
     my $self = shift;
 
+    $self->log_debug('setup_installer');
+
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
         if grep { /\s/ } @{$self->exe_files};
