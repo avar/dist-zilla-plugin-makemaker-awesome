@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.25      2014-09-13 21:17:40Z
     - add new 'preamble' and 'postamble' options, as well as overridable
       builder subs, for inserting code at the top and bottom of Makefile.PL
 

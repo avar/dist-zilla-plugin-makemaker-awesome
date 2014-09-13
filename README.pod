@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<
 
 =head1 VERSION
 
-version 0.24
+version 0.25
 
 =head1 SYNOPSIS
 
@@ -17,6 +17,7 @@ In your F<dist.ini>:
     [MakeMaker::Awesome]
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
+    preamble = die 'Unsupported OS' if $^O eq 'MSWin32';
 
 or:
 
@@ -58,6 +59,14 @@ Note: you (intentionally) cannot use this mechanism for specifying dynamic
 prerequisites, as previous occurrences of a top-level key will be overwritten
 (additionally, you cannot set the fallback prereqs from here). You should take
 a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
+
+=head2 preamble
+
+A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
+
+=head2 postamble
+
+A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
 
 =head2 test_file
 
@@ -212,6 +221,14 @@ L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
 Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
+
+=head3 _build_preamble
+
+A C<Str> of code that will be included near the top of F<Makefile.PL>.
+
+=head3 _build_postamble
+
+A C<Str> of code that will be included at the bottom of F<Makefile.PL>.
 
 =head3 _build_test_files
 
