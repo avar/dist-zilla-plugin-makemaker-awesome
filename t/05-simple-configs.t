@@ -32,6 +32,8 @@ my $tzil = Builder->from_config(
 WriteMakefile_arg = CCFLAGS => '-Wall'
 test_file = xt/*.t
 exe_file = bin/hello-world
+preamble = my \$string = 'oh hai';
+postamble = my \$other_string = 'and I like ponies';
 END_INI
             path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
             path(qw(source xt foo.t)) => 'warn "here is an extra test";',
@@ -47,6 +49,12 @@ my $content = $tzil->slurp_file('build/Makefile.PL');
 
 like(
     $content,
+    qr/^use ExtUtils::MakeMaker.*;\n\nmy \$string = 'oh hai';\n\n/m,
+    'preamble appears right after "use" line',
+);
+
+like(
+    $content,
     qr{^\s+"TESTS"\s+=>\s+\Q"xt/*.t"\E}m,
     'test_files were set',
 );
@@ -55,10 +63,17 @@ like(
     qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}m,
     'exe files were set',
 );
+
 like(
     $content,
     qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => '-Wall',\n^\);\n/m,
     'additional WriteMakefile argument is set',
+);
+
+like(
+    $content,
+    qr/^my \$other_string = 'and I like ponies';\n\z/m,
+    'postamble appears right before the end of the file',
 );
 
 subtest 'run the generated Makefile.PL' => sub

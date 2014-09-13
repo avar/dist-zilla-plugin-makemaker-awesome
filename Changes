@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - add new 'preamble' and 'postamble' options, as well as overridable
+      builder subs, for inserting code at the top and bottom of Makefile.PL
 
 0.24      2014-08-14 02:07:13Z
     - add x_breaks metadata, and a test that checks it, for

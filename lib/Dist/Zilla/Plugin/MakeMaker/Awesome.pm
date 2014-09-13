@@ -14,13 +14,15 @@ extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 # avoid wiping out the method modifications to dump_config done by superclass
 with 'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' };
 
-sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files) }
+sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files preamble_strs postamble_strs) }
 
 sub mvp_aliases {
     +{
         WriteMakefile_arg => 'WriteMakefile_arg_strs',
         test_file => 'test_files',
         exe_file => 'exe_files',
+        preamble => 'preamble_strs',
+        postamble => 'postamble_strs',
     }
 }
 
@@ -49,6 +51,8 @@ use warnings;
 
 use ExtUtils::MakeMaker{{ defined $eumm_version ? ' ' . $eumm_version : '' }};
 
+{{ $preamble }}
+
 {{ $share_dir_block[0] }}
 
 my {{ $WriteMakefileArgs }}
@@ -73,6 +77,7 @@ WriteMakefile(%WriteMakefileArgs);
 
 {{ $share_dir_block[1] }}
 
+{{ $postamble }}
 TEMPLATE
 
   return $template;
@@ -238,6 +243,48 @@ sub _build_share_dir_block {
     return \@share_dir_block;
 }
 
+has preamble_strs => (
+    is => 'ro', isa => ArrayRef[Str],
+    traits => ['Array'],
+    lazy => 1,
+    default => sub { [] },
+    documentation => "Additional code lines to include at the beginning of Makefile.PL",
+);
+
+has preamble => (
+    is            => 'ro',
+    isa           => Str,
+    lazy          => 1,
+    builder       => '_build_preamble',
+    documentation => "A string included at the beginning of Makefile.PL",
+);
+
+sub _build_preamble {
+    my $self = shift;
+    join "\n", @{$self->preamble_strs};
+}
+
+has postamble_strs => (
+    is => 'ro', isa => ArrayRef[Str],
+    traits => ['Array'],
+    lazy => 1,
+    default => sub { [] },
+    documentation => "Additional code lines to include at the end of Makefile.PL",
+);
+
+has postamble => (
+    is            => 'ro',
+    isa           => Str,
+    lazy          => 1,
+    builder       => '_build_postamble',
+    documentation => "A string included at the end of Makefile.PL",
+);
+
+sub _build_postamble {
+    my $self = shift;
+    join "\n", @{$self->postamble_strs};
+}
+
 sub register_prereqs {
     my ($self) = @_;
 
@@ -297,6 +344,8 @@ sub setup_installer
             fallback_prereqs  => \($self->fallback_prereq_pm),
             WriteMakefileArgs => \($self->WriteMakefile_dump),
             extra_args        => \($self->WriteMakefile_arg_strs),
+            preamble          => \$self->preamble,
+            postamble         => \$self->postamble,
         },
     );
     $file->content($content);
@@ -316,6 +365,7 @@ In your F<dist.ini>:
     [MakeMaker::Awesome]
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
+    preamble = die 'Unsupported OS' if $^O eq 'MSWin32';
 
 or:
 
@@ -357,6 +407,14 @@ Note: you (intentionally) cannot use this mechanism for specifying dynamic
 prerequisites, as previous occurrences of a top-level key will be overwritten
 (additionally, you cannot set the fallback prereqs from here). You should take
 a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
+
+=head2 preamble
+
+A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
+
+=head2 postamble
+
+A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
 
 =head2 test_file
 
@@ -511,6 +569,14 @@ L<ExtUtils::MakeMaker>'s C<WriteMakefile> function.
 Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
+
+=head3 _build_preamble
+
+A C<Str> of code that will be included near the top of F<Makefile.PL>.
+
+=head3 _build_postamble
+
+A C<Str> of code that will be included at the bottom of F<Makefile.PL>.
 
 =head3 _build_test_files
 
