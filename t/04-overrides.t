@@ -65,7 +65,7 @@ like(
 );
 like(
     $content,
-    qr/^\s+"_IGNORE"\s+=>\s+"in WriteMakefile_args",/ms,
+    qr/^\s+"_IGNORE"\s+=>\s+"in WriteMakefile_args",/m,
     '_build_WriteMakefile_args hook called',
 );
 like(
@@ -75,12 +75,12 @@ like(
 );
 like(
     $content,
-    qr{^\s+"TESTS"\s+=>\s+\Q"t/*.t xt/*.t"\E}ms,
+    qr{^\s+"TESTS"\s+=>\s+\Q"t/*.t xt/*.t"\E}m,
     '_build_test_files hook called',
 );
 like(
     $content,
-    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}ms,
+    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}m,
     '_build_exe_files hook called',
 );
 

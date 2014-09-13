@@ -47,17 +47,17 @@ my $content = $tzil->slurp_file('build/Makefile.PL');
 
 like(
     $content,
-    qr{^\s+"TESTS"\s+=>\s+\Q"xt/*.t"\E}ms,
+    qr{^\s+"TESTS"\s+=>\s+\Q"xt/*.t"\E}m,
     'test_files were set',
 );
 like(
     $content,
-    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}ms,
+    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}m,
     'exe files were set',
 );
 like(
     $content,
-    qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => '-Wall',\n^\);\n/ms,
+    qr/^%WriteMakefileArgs = \(\n^    %WriteMakefileArgs,\n^    CCFLAGS => '-Wall',\n^\);\n/m,
     'additional WriteMakefile argument is set',
 );
 
