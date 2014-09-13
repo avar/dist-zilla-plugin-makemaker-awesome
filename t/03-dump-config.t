@@ -30,7 +30,7 @@ cmp_deeply(
         dynamic_config => 0,
         x_Dist_Zilla => superhashof({
             plugins => supersetof(
-                {
+                superhashof({
                     class => 'Dist::Zilla::Plugin::MakeMaker::Awesome',
                     config => superhashof({
                         # [MakeMaker] might also record some configs of its own
@@ -38,7 +38,7 @@ cmp_deeply(
                     }),
                     name => 'MakeMaker::Awesome',
                     version => ignore,
-                },
+                }),
             ),
         }),
     }),
