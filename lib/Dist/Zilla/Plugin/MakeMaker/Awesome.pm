@@ -372,6 +372,11 @@ In your F<dist.ini>:
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
     header = die 'Unsupported OS' if $^O eq 'MSWin32';
+    footer = package MY;
+    footer = sub postamble {
+    footer =     my $self = shift;
+    footer =     return $self->SUPER::postamble . "\n\nfoo: bar\n\t$(CP) bar foo\n";
+    footer = }
 
 or:
 
