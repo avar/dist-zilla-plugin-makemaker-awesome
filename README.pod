@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<
 
 =head1 VERSION
 
-version 0.25
+version 0.26
 
 =head1 SYNOPSIS
 
@@ -17,7 +17,12 @@ In your F<dist.ini>:
     [MakeMaker::Awesome]
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
-    preamble = die 'Unsupported OS' if $^O eq 'MSWin32';
+    header = die 'Unsupported OS' if $^O eq 'MSWin32';
+    footer = package MY;
+    footer = sub postamble {
+    footer =     my $self = shift;
+    footer =     return $self->SUPER::postamble . "\n\nfoo: bar\n\t$(CP) bar foo\n";
+    footer = }
 
 or:
 
@@ -60,11 +65,11 @@ prerequisites, as previous occurrences of a top-level key will be overwritten
 (additionally, you cannot set the fallback prereqs from here). You should take
 a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 
-=head2 preamble
+=head2 header
 
 A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
 
-=head2 postamble
+=head2 footer
 
 A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
 
@@ -205,7 +210,7 @@ C<around> method modifier, something like this:
         my $NEW_CONTENT = ...;
 
         # insert new content near the beginning of the file, preserving the
-        # preamble header
+        # existing header content
         my $string = $self->$orig(@_);
         $string =~ m/use warnings;\n\n/g;
         return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
@@ -222,11 +227,11 @@ Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
-=head3 _build_preamble
+=head3 _build_header
 
 A C<Str> of code that will be included near the top of F<Makefile.PL>.
 
-=head3 _build_postamble
+=head3 _build_footer
 
 A C<Str> of code that will be included at the bottom of F<Makefile.PL>.
 

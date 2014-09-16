@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.26      2014-09-16 02:20:28Z
     - new 'preamble' and 'postamble' options renamed to 'header' and 'footer',
       to avoid confusion with MY::preamble and MY::postamble
 
