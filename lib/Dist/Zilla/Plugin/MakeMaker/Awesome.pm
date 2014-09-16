@@ -14,15 +14,15 @@ extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 # avoid wiping out the method modifications to dump_config done by superclass
 with 'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' };
 
-sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files preamble_strs postamble_strs) }
+sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files header_strs footer_strs) }
 
 sub mvp_aliases {
     +{
         WriteMakefile_arg => 'WriteMakefile_arg_strs',
         test_file => 'test_files',
         exe_file => 'exe_files',
-        preamble => 'preamble_strs',
-        postamble => 'postamble_strs',
+        header => 'header_strs',
+        footer => 'footer_strs',
     }
 }
 
@@ -53,7 +53,7 @@ use warnings;
 {{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
 use ExtUtils::MakeMaker{{ defined $eumm_version ? ' ' . $eumm_version : '' }};
 
-{{ $preamble }}
+{{ $header }}
 
 {{ $share_dir_block[0] }}
 
@@ -79,7 +79,7 @@ WriteMakefile(%WriteMakefileArgs);
 
 {{ $share_dir_block[1] }}
 
-{{ $postamble }}
+{{ $footer }}
 TEMPLATE
 
   return $template;
@@ -245,7 +245,7 @@ sub _build_share_dir_block {
     return \@share_dir_block;
 }
 
-has preamble_strs => (
+has header_strs => (
     is => 'ro', isa => ArrayRef[Str],
     traits => ['Array'],
     lazy => 1,
@@ -253,20 +253,20 @@ has preamble_strs => (
     documentation => "Additional code lines to include at the beginning of Makefile.PL",
 );
 
-has preamble => (
+has header => (
     is            => 'ro',
     isa           => Str,
     lazy          => 1,
-    builder       => '_build_preamble',
+    builder       => '_build_header',
     documentation => "A string included at the beginning of Makefile.PL",
 );
 
-sub _build_preamble {
+sub _build_header {
     my $self = shift;
-    join "\n", @{$self->preamble_strs};
+    join "\n", @{$self->header_strs};
 }
 
-has postamble_strs => (
+has footer_strs => (
     is => 'ro', isa => ArrayRef[Str],
     traits => ['Array'],
     lazy => 1,
@@ -274,17 +274,17 @@ has postamble_strs => (
     documentation => "Additional code lines to include at the end of Makefile.PL",
 );
 
-has postamble => (
+has footer => (
     is            => 'ro',
     isa           => Str,
     lazy          => 1,
-    builder       => '_build_postamble',
+    builder       => '_build_footer',
     documentation => "A string included at the end of Makefile.PL",
 );
 
-sub _build_postamble {
+sub _build_footer {
     my $self = shift;
-    join "\n", @{$self->postamble_strs};
+    join "\n", @{$self->footer_strs};
 }
 
 sub register_prereqs {
@@ -346,8 +346,8 @@ sub setup_installer
             fallback_prereqs  => \($self->fallback_prereq_pm),
             WriteMakefileArgs => \($self->WriteMakefile_dump),
             extra_args        => \($self->WriteMakefile_arg_strs),
-            preamble          => \$self->preamble,
-            postamble         => \$self->postamble,
+            header            => \$self->header,
+            footer            => \$self->footer,
         },
     );
 
@@ -371,7 +371,7 @@ In your F<dist.ini>:
     [MakeMaker::Awesome]
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
-    preamble = die 'Unsupported OS' if $^O eq 'MSWin32';
+    header = die 'Unsupported OS' if $^O eq 'MSWin32';
 
 or:
 
@@ -414,11 +414,11 @@ prerequisites, as previous occurrences of a top-level key will be overwritten
 (additionally, you cannot set the fallback prereqs from here). You should take
 a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 
-=head2 preamble
+=head2 header
 
 A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
 
-=head2 postamble
+=head2 footer
 
 A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
 
@@ -559,7 +559,7 @@ C<around> method modifier, something like this:
         my $NEW_CONTENT = ...;
 
         # insert new content near the beginning of the file, preserving the
-        # preamble header
+        # existing header content
         my $string = $self->$orig(@_);
         $string =~ m/use warnings;\n\n/g;
         return substr($string, 0, pos($string)) . $NEW_CONTENT . substr($string, pos($string));
@@ -576,11 +576,11 @@ Takes the return value of L</"_build_WriteMakefile_args"> and
 constructs a L<Str> that will be included in the F<Makefile.PL> by
 L</"_build_MakeFile_PL_template">.
 
-=head3 _build_preamble
+=head3 _build_header
 
 A C<Str> of code that will be included near the top of F<Makefile.PL>.
 
-=head3 _build_postamble
+=head3 _build_footer
 
 A C<Str> of code that will be included at the bottom of F<Makefile.PL>.
 

@@ -32,8 +32,8 @@ my $tzil = Builder->from_config(
 WriteMakefile_arg = CCFLAGS => '-Wall'
 test_file = xt/*.t
 exe_file = bin/hello-world
-preamble = my \$string = 'oh hai';
-postamble = my \$other_string = 'and I like ponies';
+header = my \$string = 'oh hai';
+footer = my \$other_string = 'and I like ponies';
 END_INI
             path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
             path(qw(source xt foo.t)) => 'warn "here is an extra test";',
@@ -63,7 +63,7 @@ use ExtUtils::MakeMaker;
 my \$string = 'oh hai';
 
 my \%WriteMakefileArgs = \(/,
-    'preamble appears right after "use" line',
+    'header appears right after "use" line',
 );
 
 like(
@@ -86,7 +86,7 @@ like(
 like(
     $content,
     qr/^my \$other_string = 'and I like ponies';\n\z/m,
-    'postamble appears right before the end of the file',
+    'footer appears right before the end of the file',
 );
 
 subtest 'run the generated Makefile.PL' => sub
