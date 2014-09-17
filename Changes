@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+    - fix test failures (since 0.25) with older versions of [MakeMaker]
 
 0.26      2014-09-16 02:20:28Z
     - new 'preamble' and 'postamble' options renamed to 'header' and 'footer',
