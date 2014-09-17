@@ -681,4 +681,26 @@ The F<.ini> file format can only support key-value pairs whereas any
 complex use of L<ExtUtils::MakeMaker> requires running custom Perl
 code and passing complex data structures to C<WriteMakefile>.
 
+=head1 AFTERWORD
+
+     ________________________
+    < everything is AWESOME! >
+     ------------------------
+        \                                  ___-------___
+         \                             _-~~             ~~-_
+          \                         _-~                    /~-_
+                 /^\__/^\         /~  \                   /    \
+               /|  O|| O|        /      \_______________/        \
+              | |___||__|      /       /                \          \
+              |          \    /      /                    \          \
+              |   (_______) /______/                        \_________ \
+              |         / /         \                      /            \
+               \         \^\\         \                  /               \     /
+                 \         ||           \______________/      _-_       //\__//
+                   \       ||------_-~~-_ ------------- \ --/~   ~\    || __/
+                     ~-----||====/~     |==================|       |/~~~~~
+                      (_(__/  ./     /                    \_\      \.
+                             (_(___/                         \_____)_)
+
+
 =cut
