@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.27      2014-09-17 03:22:49Z
     - fix test failures (since 0.25) with older versions of [MakeMaker]
     - new 'delimiter' option, which allows the use of leading whitespace in
       'header', 'footer' and 'WriteMakefile_args' strings
