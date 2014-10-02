@@ -92,7 +92,8 @@ around BUILDARGS => sub
 
     my $args = $class->$orig(@_);
 
-    if (length(my $delimiter = delete $args->{delimiter}))
+    my $delimiter = delete $args->{delimiter};
+    if (defined $delimiter and length($delimiter))
     {
         foreach my $arg (grep { exists $args->{$_} } qw(WriteMakefile_arg_strs header_strs footer_strs))
         {
