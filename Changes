@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.28      2014-10-02 04:31:44Z
    - fix test failure caused by unstated assumption that
      Dist::Zilla::Role::TestRunner is a very recent version
    - fix uninitialized warning on 5.10.x and earlier
