@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+   - fix test failure caused by unstated assumption that
+     Dist::Zilla::Role::TestRunner is a very recent version
 
 0.27      2014-09-17 03:22:49Z
     - fix test failures (since 0.25) with older versions of [MakeMaker]
