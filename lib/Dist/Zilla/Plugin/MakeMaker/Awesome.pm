@@ -133,7 +133,11 @@ sub _build_WriteMakefile_args {
 
     my $prereqs = $self->zilla->prereqs;
     my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
-    ->as_string_hash->{perl};
+       ->clone
+       ->add_requirements($prereqs->requirements_for(qw(configure requires)))
+       ->add_requirements($prereqs->requirements_for(qw(build requires)))
+       ->add_requirements($prereqs->requirements_for(qw(test requires)))
+       ->as_string_hash->{perl};
 
     $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
 
