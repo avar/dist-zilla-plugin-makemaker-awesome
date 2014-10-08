@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+   - retain MIN_PERL_VERSION argument to WriteMakefile()
 
 0.28      2014-10-02 04:31:44Z
    - fix test failure caused by unstated assumption that

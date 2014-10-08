@@ -118,6 +118,7 @@ has WriteMakefile_args => (
     handles       => {
         WriteMakefile_args => 'elements',
         delete_WriteMakefile_arg => 'delete',
+        WriteMakefile_arg => 'get',
     },
     lazy          => 1,
     builder       => '_build_WriteMakefile_args',
@@ -348,7 +349,7 @@ sub setup_installer
     $self->log_fatal("can't install files with whitespace in their names")
         if grep { /\s/ } @{$self->exe_files};
 
-    my $perl_prereq = $self->delete_WriteMakefile_arg('MIN_PERL_VERSION');
+    my $perl_prereq = $self->WriteMakefile_arg('MIN_PERL_VERSION');
 
     # file was already created; find it and fill in the content
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};

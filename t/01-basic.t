@@ -40,6 +40,7 @@ my %want = (
     VERSION  => '0.001',
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
+    MIN_PERL_VERSION => '5.008',
 
     PREREQ_PM          => {
         'Foo::Bar' => '1.20'
