@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.29      2014-10-08 04:26:08Z
    - retain MIN_PERL_VERSION argument to WriteMakefile()
    - extract the minimum perl requirement from all prereq phases, not just
      runtime
