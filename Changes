@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.30      2014-10-09 02:53:56Z
    - use a listref for AUTHOR argument to WriteMakefile(), but only when the
      EUMM version available is already high enough to accomodate it
 

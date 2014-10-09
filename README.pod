@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<
 
 =head1 VERSION
 
-version 0.29
+version 0.30
 
 =head1 SYNOPSIS
 
@@ -256,6 +256,12 @@ B<NOT> directories, despite the name.
 The files given to the C<EXE_FILES> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>.
 Defaults to using data from C<:ExecDir> plugins.
+
+=head3 _build_min_perl_version
+
+Extracts from the distribution prerequisite object the minimum version of perl
+required; used for the C<MIN_PERL_VERSION> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.
 
 =head3 register_prereqs
 
