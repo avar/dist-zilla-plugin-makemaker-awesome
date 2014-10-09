@@ -131,18 +131,10 @@ sub _build_WriteMakefile_args {
     (my $name = $self->zilla->name) =~ s/-/::/g;
     my $test_files = $self->test_files;
 
-    my $prereqs = $self->zilla->prereqs;
-    my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
-       ->clone
-       ->add_requirements($prereqs->requirements_for(qw(configure requires)))
-       ->add_requirements($prereqs->requirements_for(qw(build requires)))
-       ->add_requirements($prereqs->requirements_for(qw(test requires)))
-       ->as_string_hash->{perl};
-
-    $perl_prereq = version->parse($perl_prereq)->numify if $perl_prereq;
+    my $perl_prereq = $self->min_perl_version;
 
     my $prereqs_dump = sub {
-        $prereqs->requirements_for(@_)
+        $self->zilla->prereqs->requirements_for(@_)
         ->clone
         ->clear_requirement('perl')
         ->as_string_hash;
@@ -151,10 +143,14 @@ sub _build_WriteMakefile_args {
     my $build_prereq = $prereqs_dump->(qw(build requires));
     my $test_prereq = $prereqs_dump->(qw(test requires));
 
+    my @authors = @{ $self->zilla->authors };
+
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
         NAME      => $name,
-        AUTHOR    => $self->zilla->authors->join(q{, }),
+        ( AUTHOR  => @authors > 1 && ($self->eumm_version >= 6.5702 || $perl_prereq >= 5.013005)
+                     ? \@authors
+                     : join(q{, }, @authors) ),
         ABSTRACT  => $self->zilla->abstract,
         VERSION   => $self->zilla->version,
         LICENSE   => $self->zilla->license->meta_yml_name,
@@ -173,6 +169,42 @@ sub _build_WriteMakefile_args {
     return \%WriteMakefile;
 }
 
+# overrides parent version
+has eumm_version => (
+    isa => 'Str',
+    is  => 'rw',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        # do not unnecessarily raise the version just for listref AUTHOR
+        @{$self->zilla->authors} > 1 && $self->min_perl_version >= 5.013005
+            ? '6.5702' : 0,
+    },
+);
+
+has min_perl_version => (
+    isa => 'Str',
+    is  => 'rw',
+    lazy => 1,
+    builder => '_build_min_perl_version',
+);
+
+sub _build_min_perl_version
+{
+    my $self = shift;
+
+    my $prereqs = $self->zilla->prereqs;
+    my $perl_prereq = $prereqs->requirements_for(qw(runtime requires))
+       ->clone
+       ->add_requirements($prereqs->requirements_for(qw(configure requires)))
+       ->add_requirements($prereqs->requirements_for(qw(build requires)))
+       ->add_requirements($prereqs->requirements_for(qw(test requires)))
+       ->as_string_hash->{perl};
+
+    $perl_prereq
+        ? version->parse($perl_prereq)->numify
+        : 0;
+}
 
 has WriteMakefile_dump => (
     is            => 'ro',
@@ -634,6 +666,12 @@ B<NOT> directories, despite the name.
 The files given to the C<EXE_FILES> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>.
 Defaults to using data from C<:ExecDir> plugins.
+
+=head3 _build_min_perl_version
+
+Extracts from the distribution prerequisite object the minimum version of perl
+required; used for the C<MIN_PERL_VERSION> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>.
 
 =head3 register_prereqs
 

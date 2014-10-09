@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+   - use a listref for AUTHOR argument to WriteMakefile(), but only when the
+     EUMM version available is already high enough to accomodate it
 
 0.29      2014-10-08 04:26:08Z
    - retain MIN_PERL_VERSION argument to WriteMakefile()
