@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.31      2014-10-10 05:25:42Z
    - fix failing tests on 5.8.x
 
 0.30      2014-10-09 02:53:56Z
