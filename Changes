@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+   - fix failing tests on 5.8.x
 
 0.30      2014-10-09 02:53:56Z
    - use a listref for AUTHOR argument to WriteMakefile(), but only when the

@@ -16,10 +16,10 @@ my $tzil = Builder->from_config(
             path(qw(source dist.ini)) => simple_ini(
                 'GatherDir',
                 [ 'MakeMaker::Awesome' => { eumm_version => '6.00' } ],
-                [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.008' } ],
+                [ Prereqs => { 'Foo::Bar' => '1.20',      perl => '5.006' } ],
                 [ Prereqs => BuildRequires => { 'Builder::Bob' => '9.901' } ],
                 [ Prereqs => TestRequires  => { 'Test::Deet'   => '7',
-                                                perl           => '5.010' } ],
+                                                perl           => '5.008' } ],
             ),
             path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
             path(qw(source t basic.t)) => 'warn "here is a test";',
@@ -40,7 +40,7 @@ my %want = (
     VERSION  => '0.001',
     AUTHOR   => 'E. Xavier Ample <example@example.org>',
     LICENSE  => 'perl',
-    MIN_PERL_VERSION => '5.010',
+    MIN_PERL_VERSION => '5.008',
 
     PREREQ_PM          => {
         'Foo::Bar' => '1.20'
@@ -79,7 +79,7 @@ like(
 use strict;
 use warnings;
 
-use 5\.010;
+use 5\.008;
 use ExtUtils::MakeMaker 6\.00;
 
 my \%WriteMakefileArgs = \(/,
