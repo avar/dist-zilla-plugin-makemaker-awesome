@@ -86,9 +86,10 @@ my \%WriteMakefileArgs = \(/,
     'Makefile.PL header looks correct',
 );
 
+my $WriteMakefileArgs = $tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs');
 like(
     $content,
-    qr/(?{ quotemeta($tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs')) })/,
+    qr/\Q$WriteMakefileArgs\E/,
     'arguments are dumped to Makefile.PL',
 );
 
