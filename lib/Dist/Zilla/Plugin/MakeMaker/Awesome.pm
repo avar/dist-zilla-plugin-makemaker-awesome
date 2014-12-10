@@ -5,7 +5,6 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use MooseX::Types::Stringlike 'Stringlike';
-use Moose::Autobox;
 use namespace::autoclean;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::Util 'first';
@@ -235,7 +234,7 @@ sub _build_test_files {
     my ($self) = @_;
 
     my %test_files;
-    for my $file ($self->zilla->files->flatten) {
+    for my $file (@{ $self->zilla->files }) {
         next unless $file->name =~ m{\At/.+\.t\z};
         (my $pattern = $file->name) =~ s{/[^/]+\.t\z}{/*.t}g;
 
@@ -256,8 +255,7 @@ has exe_files => (
 sub _build_exe_files {
     my ($self) = @_;
 
-    my @exe_files =
-        $self->zilla->find_files(':ExecFiles')->map(sub { $_->name })->flatten;
+    my @exe_files = map { $_->name } @{ $self->zilla->find_files(':ExecFiles') };
 
     return \@exe_files;
 }
