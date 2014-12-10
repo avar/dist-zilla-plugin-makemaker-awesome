@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+
+0.32      2014-12-10 02:19:22Z
    - eliminated all uses of Moose::Autobox
    - avoid ever requiring v0 of ExtUtils::MakeMaker
 
