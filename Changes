@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{$NEXT}}
+  - re-release to fix problematic $VERSION declaration (RT#101095)
 
 0.32      2014-12-10 02:19:22Z
    - eliminated all uses of Moose::Autobox
