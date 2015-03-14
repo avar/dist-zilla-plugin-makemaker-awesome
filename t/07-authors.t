@@ -5,6 +5,7 @@ use Test::More 0.88;
 use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::Deep;
 use Test::DZil;
+use Path::Tiny;
 use File::pushd 'pushd';
 
 {
@@ -12,7 +13,7 @@ use File::pushd 'pushd';
         { dist_root => 'corpus/dist/DZT' },
         {
             add_files => {
-                'source/dist.ini' => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
                     'GatherDir',
                     [ Prereqs => { perl => 5.016 } ],   # must be before MMA
                     'MakeMaker::Awesome',
@@ -59,7 +60,7 @@ use File::pushd 'pushd';
         { dist_root => 'corpus/dist/DZT' },
         {
             add_files => {
-                'source/dist.ini' => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
                     'GatherDir',
                     [ 'MakeMaker::Awesome' => { eumm_version => '6.68' } ],
                 ),
@@ -100,7 +101,7 @@ use File::pushd 'pushd';
         { dist_root => 'corpus/dist/DZT' },
         {
             add_files => {
-                'source/dist.ini' => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
                     'GatherDir',
                     'MakeMaker::Awesome',
                 ),
