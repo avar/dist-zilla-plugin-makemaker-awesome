@@ -468,6 +468,7 @@ key-value pairs, for example:
     WriteMakefile_arg = ( $^O eq 'solaris' ? ( CCFLAGS => '-Wall' ) : ())
 
 Can be used more than once.
+Available since version 0.21.
 
 =for stopwords DynamicPrereqs
 
@@ -479,10 +480,12 @@ a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 =head2 header
 
 A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
+Available since version 0.26.
 
 =head2 footer
 
 A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
+Available since version 0.26.
 
 =head2 delimiter
 
@@ -493,17 +496,23 @@ this character at the front allows you to use leading whitespace in an option
 string.  This is crucial for the formatting of F<Makefile>s, but a nice thing
 to have when inserting any block of code.
 
+Available since version 0.27.
+
 =head2 test_file
 
 A glob path given to the C<< test => { TESTS => ... } >> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
 Defaults to F<.t> files under F<t/>.  B<NOT> a directory name, despite the name.
 
+Available since version 0.21.
+
 =head2 exe_file
 
 The file given to the C<EXE_FILES> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
 Defaults to using data from C<:ExecDir> plugins.
+
+Available since version 0.21.
 
 =head1 SUBCLASSING
 
