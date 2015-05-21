@@ -10,7 +10,7 @@ use File::pushd 'pushd';
 
 {
     my $tzil = Builder->from_config(
-        { dist_root => 'corpus/dist/DZT' },
+        { dist_root => 'does_not_exist' },
         {
             add_files => {
                 path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
@@ -57,7 +57,7 @@ use File::pushd 'pushd';
 
 {
     my $tzil = Builder->from_config(
-        { dist_root => 'corpus/dist/DZT' },
+        { dist_root => 'does_not_exist' },
         {
             add_files => {
                 path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
@@ -98,7 +98,7 @@ use File::pushd 'pushd';
 
 {
     my $tzil = Builder->from_config(
-        { dist_root => 'corpus/dist/DZT' },
+        { dist_root => 'does_not_exist' },
         {
             add_files => {
                 path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(

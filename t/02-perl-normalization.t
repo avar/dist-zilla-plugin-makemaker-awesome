@@ -7,7 +7,7 @@ use Test::DZil;
 use Path::Tiny;
 
 my $tzil = Builder->from_config(
-    { dist_root => path(qw(corpus dist DZT)) },
+    { dist_root => 'does_not_exist' },
     {
         add_files => {
             path(qw(source dist.ini)) => simple_ini(
