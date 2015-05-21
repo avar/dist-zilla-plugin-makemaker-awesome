@@ -141,8 +141,9 @@ sub _build_WriteMakefile_args {
         ->as_string_hash;
     };
 
-    my $build_prereq = $prereqs_dump->(qw(build requires));
-    my $test_prereq = $prereqs_dump->(qw(test requires));
+    my %require_prereqs = map {
+        $_ => $prereqs_dump->($_, 'requires');
+    } qw(configure build test runtime);
 
     my @authors = @{ $self->zilla->authors };
 
@@ -157,10 +158,10 @@ sub _build_WriteMakefile_args {
         LICENSE   => $self->zilla->license->meta_yml_name,
         EXE_FILES => $self->exe_files,
 
-        CONFIGURE_REQUIRES => $prereqs_dump->(qw(configure requires)),
-        keys %$build_prereq ? ( BUILD_REQUIRES => $build_prereq ) : (),
-        keys %$test_prereq ? ( TEST_REQUIRES => $test_prereq ) : (),
-        PREREQ_PM          => $prereqs_dump->(qw(runtime   requires)),
+        CONFIGURE_REQUIRES => $require_prereqs{configure},
+        keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),
+        keys %{ $require_prereqs{test} } ? ( TEST_REQUIRES => $require_prereqs{test} ) : (),
+        PREREQ_PM          => $require_prereqs{runtime},
 
         test => { TESTS => join q{ }, sort @$test_files },
 
