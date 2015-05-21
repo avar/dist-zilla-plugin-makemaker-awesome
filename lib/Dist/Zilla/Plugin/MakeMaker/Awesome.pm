@@ -161,7 +161,6 @@ sub _build_WriteMakefile_args {
     my @authors = @{ $self->zilla->authors };
     my $exe_files = $self->exe_files;
 
-
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
         NAME      => $name,
