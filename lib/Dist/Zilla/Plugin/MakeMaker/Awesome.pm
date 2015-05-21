@@ -159,6 +159,8 @@ sub _build_WriteMakefile_args {
     }
 
     my @authors = @{ $self->zilla->authors };
+    my $exe_files = $self->exe_files;
+
 
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
@@ -169,7 +171,7 @@ sub _build_WriteMakefile_args {
         ABSTRACT  => $self->zilla->abstract,
         VERSION   => $self->zilla->version,
         LICENSE   => $self->zilla->license->meta_yml_name,
-        EXE_FILES => $self->exe_files,
+        @$exe_files ? ( EXE_FILES => $exe_files ) : (),
 
         CONFIGURE_REQUIRES => $require_prereqs{configure},
         keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),

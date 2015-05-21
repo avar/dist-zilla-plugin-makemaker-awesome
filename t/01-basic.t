@@ -54,7 +54,7 @@ my %want = (
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => '6.00'
     },
-    EXE_FILES => [],
+    # EXE_FILES omitted
     test => { TESTS => 't/*.t' },
   );
 
