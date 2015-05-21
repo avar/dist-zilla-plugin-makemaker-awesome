@@ -42,8 +42,6 @@ $tzil->build;
 
 my $content = $tzil->slurp_file('build/Makefile.PL');
 
-my $VERSION = Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION || '<self>';
-
 cmp_ok(
     index($content, "my \$string = 'oh hai';\n\nmy \%WriteMakefileArgs"),
     '>=', 200,

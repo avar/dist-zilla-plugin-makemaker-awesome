@@ -35,7 +35,7 @@ cmp_deeply(
                     # [MakeMaker] and Dist::Zilla::Role::TestRunner might also
                     # record some configs of their own, depending on version
                     name => 'MakeMaker::Awesome',
-                    version => ignore,
+                    version => Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION,
                 }),
             ),
         }),

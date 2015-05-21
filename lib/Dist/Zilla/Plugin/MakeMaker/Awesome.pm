@@ -2,6 +2,8 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 # ABSTRACT: A more awesome MakeMaker plugin for L<Dist::Zilla>
 # KEYWORDS: plugin installer MakeMaker Makefile.PL toolchain customize override
 
+our $VERSION = '0.34';
+
 use Moose;
 use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
 use MooseX::Types::Stringlike 'Stringlike';
@@ -42,7 +44,7 @@ sub _build_MakeFile_PL_template {
 # {{ ref $plugin }} {{ ($plugin->VERSION || '<self>')
 . (ref $plugin ne 'Dist::Zilla::Plugin::MakeMaker::Awesome'
   ? "\n" . '# and Dist::Zilla::Plugin::MakeMaker::Awesome '
-    . Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION || '<self>'
+    . Dist::Zilla::Plugin::MakeMaker::Awesome->VERSION
   : '') }}.
 # Don't edit it but the dist.ini and plugins used to construct it.
 
