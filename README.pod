@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<
 
 =head1 VERSION
 
-version 0.33
+version 0.34
 
 =head1 SYNOPSIS
 
@@ -58,6 +58,7 @@ key-value pairs, for example:
     WriteMakefile_arg = ( $^O eq 'solaris' ? ( CCFLAGS => '-Wall' ) : ())
 
 Can be used more than once.
+Available since version 0.21.
 
 =for stopwords DynamicPrereqs
 
@@ -69,10 +70,12 @@ a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 =head2 header
 
 A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
+Available since version 0.26.
 
 =head2 footer
 
 A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
+Available since version 0.26.
 
 =head2 delimiter
 
@@ -83,17 +86,23 @@ this character at the front allows you to use leading whitespace in an option
 string.  This is crucial for the formatting of F<Makefile>s, but a nice thing
 to have when inserting any block of code.
 
+Available since version 0.27.
+
 =head2 test_file
 
 A glob path given to the C<< test => { TESTS => ... } >> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
 Defaults to F<.t> files under F<t/>.  B<NOT> a directory name, despite the name.
 
+Available since version 0.21.
+
 =head2 exe_file
 
 The file given to the C<EXE_FILES> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
 Defaults to using data from C<:ExecDir> plugins.
+
+Available since version 0.21.
 
 =head1 SUBCLASSING
 
@@ -336,9 +345,19 @@ code and passing complex data structures to C<WriteMakefile>.
                       (_(__/  ./     /                    \_\      \.
                              (_(___/                         \_____)_)
 
-=head1 AUTHOR
+=head1 AUTHORS
+
+=over 4
+
+=item *
 
 Ævar Arnfjörð Bjarmason <avar@cpan.org>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 
@@ -349,13 +368,9 @@ the same terms as the Perl 5 programming language system itself.
 
 =head1 CONTRIBUTORS
 
-=for stopwords Karen Etheridge Jesse Luehrs Robin Smidsrød Vladimir Timofeev
+=for stopwords Jesse Luehrs Robin Smidsrød Vladimir Timofeev
 
 =over 4
-
-=item *
-
-Karen Etheridge <ether@cpan.org>
 
 =item *
 
