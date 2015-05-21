@@ -1,6 +1,9 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - issue a warning when version ranges are passed through to
+    ExtUtils::MakeMaker, which cannot parse them and treats them as '0'
+    (see https://github.com/Perl-Toolchain-Gang/ExtUtils-MakeMaker/issues/215)
 
 0.33      2015-01-03 20:55:21Z
   - re-release to fix problematic $VERSION declaration (RT#101095)
