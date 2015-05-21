@@ -13,7 +13,13 @@ use File::pushd 'pushd';
         { dist_root => 'does_not_exist' },
         {
             add_files => {
-                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => simple_ini(
+                    {   # merge into root section
+                        author   => [
+                            'Anon Y. Moose <anon@null.com>',
+                            'Anne O\'Thor <anne@cpan.org',
+                        ],
+                    },
                     'GatherDir',
                     [ Prereqs => { perl => 5.016 } ],   # must be before MMA
                     'MakeMaker::Awesome',
@@ -60,7 +66,13 @@ use File::pushd 'pushd';
         { dist_root => 'does_not_exist' },
         {
             add_files => {
-                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => simple_ini(
+                    {   # merge into root section
+                        author   => [
+                            'Anon Y. Moose <anon@null.com>',
+                            'Anne O\'Thor <anne@cpan.org',
+                        ],
+                    },
                     'GatherDir',
                     [ 'MakeMaker::Awesome' => { eumm_version => '6.68' } ],
                 ),
@@ -101,7 +113,13 @@ use File::pushd 'pushd';
         { dist_root => 'does_not_exist' },
         {
             add_files => {
-                path(qw(source dist.ini)) => "author = Ann O'Thor <anne\@cpan.org>\n" . simple_ini(
+                path(qw(source dist.ini)) => simple_ini(
+                    {   # merge into root section
+                        author   => [
+                            'Anon Y. Moose <anon@null.com>',
+                            'Anne O\'Thor <anne@cpan.org',
+                        ],
+                    },
                     'GatherDir',
                     'MakeMaker::Awesome',
                 ),
