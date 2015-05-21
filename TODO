@@ -1,0 +1,17 @@
+
+TODO RT#102947: better warning if there is another MakeMaker plugin in use
+(we can look for things using the InstallTool role, or inherting from
+MakeMaker, and also provide information about what plugin added Makefile.PL.)
+
+------------
+
+14:45 < trs> it's useful if you forgot trailing commas in the dist.ini
+14:45 < trs> but it doesn't let you *not* have trailing commas across multiple dist.ini lines.
+14:47 < trs> it may turn out to be ETOOMUCHMAGIC, but I wonder about adding commas for lines without a leading delimiter and leaving lines with a delimiter alone.
+14:47 < trs> so that if you prepend your dist.ini values with "|" or something, you can fully control the line.
+14:47 < trs> but if you don't, MM::Awesome tries to make sure your Makefile.PL isn't a syntax error.
+14:48 < trs> even sweeter feature request, while I'm thinking about it: insert Makefile.PL lines from a damn file and be done with any syntax second guessing.
+
+
+- see DynamicPrereqs for a better way of running tests
+
