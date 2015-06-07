@@ -53,7 +53,7 @@ use strict;
 use warnings;
 
 {{ $perl_prereq ? qq[use $perl_prereq;] : ''; }}
-use ExtUtils::MakeMaker{{ defined $eumm_version && 0+$eumm_version ? ' ' . $eumm_version : '' }};
+use ExtUtils::MakeMaker{{ 0+$eumm_version ? ' ' . $eumm_version : '' }};
 
 {{ $header }}
 
