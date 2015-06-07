@@ -170,7 +170,7 @@ sub _build_WriteMakefile_args {
         ABSTRACT  => $self->zilla->abstract,
         VERSION   => $self->zilla->version,
         LICENSE   => $self->zilla->license->meta_yml_name,
-        @$exe_files ? ( EXE_FILES => $exe_files ) : (),
+        @$exe_files ? ( EXE_FILES => [ sort @$exe_files ] ) : (),
 
         CONFIGURE_REQUIRES => $require_prereqs{configure},
         keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),
