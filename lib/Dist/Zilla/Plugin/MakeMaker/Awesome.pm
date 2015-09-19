@@ -11,6 +11,7 @@ use namespace::autoclean;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::Util 1.29 qw(first pairs pairgrep);
 use version;
+use Path::Tiny;
 
 extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 # avoid wiping out the method modifications to dump_config done by superclass
@@ -337,6 +338,11 @@ has header_strs => (
     documentation => "Additional code lines to include at the beginning of Makefile.PL",
 );
 
+has header_file => (
+    is => 'ro', isa => Str,
+    documentation => 'Additional header content to include from a file',
+);
+
 has header => (
     is            => 'ro',
     isa           => Str,
@@ -347,7 +353,9 @@ has header => (
 
 sub _build_header {
     my $self = shift;
-    join "\n", @{$self->header_strs};
+    join "\n",
+        @{$self->header_strs},
+        ( $self->header_file ? path($self->header_file)->slurp_utf8 : () );
 }
 
 has footer_strs => (
@@ -356,6 +364,11 @@ has footer_strs => (
     lazy => 1,
     default => sub { [] },
     documentation => "Additional code lines to include at the end of Makefile.PL",
+);
+
+has footer_file => (
+    is => 'ro', isa => Str,
+    documentation => 'Additional footer content to include from a file',
 );
 
 has footer => (
@@ -368,7 +381,9 @@ has footer => (
 
 sub _build_footer {
     my $self = shift;
-    join "\n", @{$self->footer_strs};
+    join "\n",
+        @{$self->footer_strs},
+        ( $self->footer_file ? path($self->footer_file)->slurp_utf8 : () );
 }
 
 sub register_prereqs {
@@ -514,10 +529,22 @@ a look at L<[DynamicPrereqs]|Dist::Zilla::Plugin::DynamicPrereqs> for this.
 A line of code which is included near the top of F<Makefile.PL>.  Can be used more than once.
 Available since version 0.26.
 
+=head2 header_file
+
+The name of a file in the source tree (does not need to be gathered in the
+build) whose content is inserted near the top of F<Makefile.PL>.
+Available since version 0.35.
+
 =head2 footer
 
 A line of code which is included at the bottom of F<Makefile.PL>.  Can be used more than once.
 Available since version 0.26.
+
+=head2 footer_file
+
+The name of a file in the source tree (does not need to be gathered in the
+build) whose content is inserted at the bottom of F<Makefile.PL>.
+Available since version 0.35.
 
 =head2 delimiter
 

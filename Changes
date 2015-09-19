@@ -4,6 +4,7 @@ Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
   - sort EXE_FILES list in MakeMaker arguments
   - a more helpful error is given when something else pruned Makefile.PL after
     it was gathered
+  - new 'header_file', 'footer_file' configuration options
 
 0.34      2015-05-21 02:46:56Z
   - issue a warning when version ranges are passed through to
