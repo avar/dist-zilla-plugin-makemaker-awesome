@@ -419,6 +419,10 @@ sub setup_installer
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
     $self->log_debug([ 'updating contents of Makefile.PL in memory' ]);
 
+    $self->log_fatal('Makefile.PL has vanished from the distribution! Did you [PruneFiles] the file after it was gathered?'
+            . "\n" . '(instead, try [GatherDir] exclude_filename = Makefile.PL)')
+        if not $file;
+
     my $content = $self->fill_in_string(
         $file->content,
         {
