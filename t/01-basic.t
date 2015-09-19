@@ -84,7 +84,7 @@ my \%WriteMakefileArgs = \(/,
     'Makefile.PL header looks correct',
 );
 
-my $WriteMakefileArgs = $tzil->plugin_named('MakeMaker::Awesome')->_dump_as(\%want, '*WriteMakefileArgs');
+my $WriteMakefileArgs = $makemaker->_dump_as(\%want, '*WriteMakefileArgs');
 like(
     $content,
     qr/\Q$WriteMakefileArgs\E/,
