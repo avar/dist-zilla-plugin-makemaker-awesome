@@ -737,7 +737,7 @@ to filter it out.
 
 =back
 
-=head1 BUGS
+=head1 LIMITATIONS
 
 =for stopwords INI
 
