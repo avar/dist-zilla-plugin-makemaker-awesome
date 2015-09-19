@@ -742,7 +742,7 @@ to filter it out.
 =for stopwords INI
 
 This plugin would suck less if L<Dist::Zilla> didn't use a INI-based
-config system so you could add a stuff like this in your main
+config system so you could add stuff like this in your main
 configuration file like you can with L<Module::Install>.
 
 The F<.ini> file format can only support key-value pairs whereas any
