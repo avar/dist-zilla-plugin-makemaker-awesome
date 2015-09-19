@@ -91,6 +91,34 @@ like(
     'arguments are dumped to Makefile.PL',
 );
 
+cmp_deeply(
+    $tzil->distmeta,
+    superhashof({
+        prereqs => {
+            configure => {
+                requires => {
+                    'ExtUtils::MakeMaker' => '6.00',
+                },
+            },
+            build => { requires => { 'Builder::Bob' => '9.901' } },
+            runtime => {
+                requires => {
+                    'Foo::Bar' => '1.20',
+                    'perl' => ignore,   # probably raised to 5.008 by [MakeMaker]
+                },
+            },
+            test => {
+                requires => {
+                    'Test::Deet' => '7',
+                    'perl' => '5.008',
+                },
+            },
+        },
+        dynamic_config => 0,
+    }),
+    'plugin metadata, including dumped configs',
+) or diag 'got distmeta: ', explain $tzil->distmeta;
+
 subtest 'run the generated Makefile.PL' => sub
 {
     my $wd = pushd path($tzil->tempdir)->child('build');

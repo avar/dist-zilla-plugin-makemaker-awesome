@@ -27,6 +27,9 @@ $tzil->build;
 cmp_deeply(
     $tzil->distmeta,
     superhashof({
+        prereqs => {
+            configure => { requires => { 'ExtUtils::MakeMaker' => '0' } },
+        },
         dynamic_config => 0,
         x_Dist_Zilla => superhashof({
             plugins => supersetof(
