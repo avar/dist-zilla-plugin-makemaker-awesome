@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
-{{$NEXT}}
+0.35      2015-09-19 21:51:21Z
   - sort EXE_FILES list in MakeMaker arguments
   - a more helpful error is given when something else pruned Makefile.PL after
     it was gathered
