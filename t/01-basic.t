@@ -66,7 +66,7 @@ cmp_deeply(
 
 my $content = $tzil->slurp_file('build/Makefile.PL');
 
-unlike($content, qr/[^\S\n]\n/m, 'no trailing whitespace in generated file');
+unlike($content, qr/[^\S\n]\n/, 'no trailing whitespace in generated file');
 
 like(
     $content,
