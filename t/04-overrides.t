@@ -58,6 +58,8 @@ $tzil->build;
 # this isn't that great of a test... would be nice to do more sophisticated
 # testing of the content generated.
 
+local $TODO = 'qr/...$/m does not work before perl 5.010' if "$]" < '5.010';
+
 my $content = $tzil->slurp_file('build/Makefile.PL');
 like(
     $content,
@@ -84,6 +86,8 @@ like(
     qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}m,
     '_build_exe_files hook called',
 );
+
+local $TODO;
 
 subtest 'run the generated Makefile.PL' => sub
 {
