@@ -397,7 +397,7 @@ sub register_prereqs {
     return unless keys %{ $self->zilla->_share_dir_map };
 
     $self->zilla->register_prereqs(
-        { phase => 'configure' },
+        { phase => 'configure', type => 'requires' },
         'File::ShareDir::Install' => 0.03,
     );
 
