@@ -1,8 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
-  - use TODO around tests that fail on perl 5.8.x due to the buggy
-    handling of qr/...$/m
+  - fix tests that fail on perl 5.8.x due to the buggy handling of qr/...$/m
 
 0.35      2015-09-19 21:51:21Z
   - sort EXE_FILES list in MakeMaker arguments
