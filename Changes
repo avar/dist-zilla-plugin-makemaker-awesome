@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
+{{$NEXT}}
+
 0.36      2016-03-13 00:05:01Z
   - fix tests that fail on perl 5.8.x due to the buggy handling of qr/...$/m
 
