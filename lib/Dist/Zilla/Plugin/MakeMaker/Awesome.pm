@@ -68,7 +68,6 @@ my {{ $WriteMakefileArgs }}
     : '';
 }}
 my {{ $fallback_prereqs }}
-
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
   delete $WriteMakefileArgs{TEST_REQUIRES};
   delete $WriteMakefileArgs{BUILD_REQUIRES};
