@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
+{{$NEXT}}
+
 0.37      2016-03-22 03:11:04Z
   - now rejecting version ranges in prereqs if eumm_version is not specified
     to be high enough (7.1101) to guarantee it can be handled
