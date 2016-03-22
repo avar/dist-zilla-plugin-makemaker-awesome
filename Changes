@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - revert some unhelpful whitespace changes that hinder other plugins from
+    munging the Makefile.PL template
 
 0.37      2016-03-22 03:11:04Z
   - now rejecting version ranges in prereqs if eumm_version is not specified
