@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
-{{$NEXT}}
+0.38      2016-03-25 02:25:51Z
   - revert some unhelpful whitespace changes that hinder other plugins from
     munging the Makefile.PL template
 
