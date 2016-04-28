@@ -354,6 +354,8 @@ has header => (
 
 sub _build_header {
     my $self = shift;
+    $self->log_fatal([ 'header_file %s does not exist!', $self->header_file->stringify ])
+        if $self->header_file and not -e $self->header_file;
     join "\n",
         @{$self->header_strs},
         ( $self->header_file ? path($self->header_file)->slurp_utf8 : () );
@@ -382,6 +384,8 @@ has footer => (
 
 sub _build_footer {
     my $self = shift;
+    $self->log_fatal([ 'footer_file %s does not exist!', $self->footer_file->stringify ])
+        if $self->footer_file and not -e $self->footer_file;
     join "\n",
         @{$self->footer_strs},
         ( $self->footer_file ? path($self->footer_file)->slurp_utf8 : () );
