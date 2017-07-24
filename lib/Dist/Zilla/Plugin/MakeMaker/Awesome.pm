@@ -281,7 +281,7 @@ has exe_files => (
     isa           => ArrayRef[Str],
     lazy          => 1,
     builder       => '_build_exe_files',
-    documentation => "The test directories given to ExtUtils::MakeMaker's EXE_FILES (in munged form)",
+    documentation => "The list of filenames given to ExtUtils::MakeMaker's EXE_FILES (in munged form)",
 );
 
 sub _build_exe_files {
