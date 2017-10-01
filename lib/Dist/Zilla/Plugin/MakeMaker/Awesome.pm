@@ -117,6 +117,11 @@ around dump_config => sub
     };
     $config->{+__PACKAGE__} = $data if keys %$data;
 
+    $config->{'Dist::Zilla::Plugin::MakeMaker'}{make_path} ||= $self->make_path;
+    $config->{'Dist::Zilla::Plugin::MakeMaker'}{version} ||= Dist::Zilla::Plugin::MakeMaker->VERSION;
+    $config->{'Dist::Zilla::Role::TestRunner'}{default_jobs} ||= $self->default_jobs;
+    $config->{'Dist::Zilla::Role::TestRunner'}{version} ||= Dist::Zilla::Role::TestRunner->VERSION;
+
     return $config;
 };
 
