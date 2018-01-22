@@ -19,7 +19,7 @@ use File::pushd 'pushd';
     };
     around _build_WriteMakefile_args => sub {
         my $orig = shift; my $self = shift;
-        return +{ %{ $self->$orig(@_) }, '_IGNORE' => 'in WriteMakefile_args' }
+        return +{ %{ $self->$orig(@_) }, 'NAME' => 'in WriteMakefile_args' }
     };
     around _build_WriteMakefile_dump => sub {
         my $orig = shift; my $self = shift;
@@ -69,7 +69,7 @@ like(
 );
 like(
     $content,
-    qr/^\s+"_IGNORE"\s+=>\s+"in WriteMakefile_args",/m,
+    qr/^\s+"NAME"\s+=>\s+"in WriteMakefile_args",/m,
     '_build_WriteMakefile_args hook called',
 );
 like(
