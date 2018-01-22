@@ -43,7 +43,7 @@ cmp_deeply(
                             version => Dist::Zilla::Plugin::MakeMaker->VERSION,
                         }),
                         'Dist::Zilla::Role::TestRunner' => superhashof({
-                            default_jobs => ignore,
+                            Dist::Zilla::Role::TestRunner->VERSION >= '5.014' ? ( default_jobs => ignore ) : (),
                             version => Dist::Zilla::Role::TestRunner->VERSION,
                         }),
                     },
