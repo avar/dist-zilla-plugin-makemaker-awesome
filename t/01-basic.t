@@ -78,7 +78,8 @@ use strict;
 use warnings;
 
 use 5\.008;
-use ExtUtils::MakeMaker 6\.00;
+use ExtUtils::MakeMaker;
+BEGIN \{ ExtUtils::MakeMaker->VERSION\('6\.00'\) }
 
 my \%WriteMakefileArgs = \(/,
     'Makefile.PL header looks correct',
