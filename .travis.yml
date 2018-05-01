@@ -30,7 +30,7 @@ before_install:
   - build-dist
   - cd $BUILD_DIR
 install:
-  - perl -M5.014 -e1 2>/dev/null || cpan-install Dist::Zilla@5.047
+  - perl -M5.014 -e1 2>/dev/null || cpan-install Dist::Zilla@5.048
   - cpan-install --deps
 script:
   - perl Build.PL
