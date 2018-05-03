@@ -177,7 +177,7 @@ sub _build_WriteMakefile_args {
         }
     }
 
-    my @authors = @{ $self->zilla->authors };
+    my @authors = eval { Dist::Zilla->VERSION('7.000') } ? $self->zilla->authors : @{ $self->zilla->authors };
     my $exe_files = $self->exe_files;
 
     my %WriteMakefile = (
@@ -212,8 +212,9 @@ has eumm_version => (
     default => sub {
         my $self = shift;
         # do not unnecessarily raise the version just for listref AUTHOR
-        @{$self->zilla->authors} > 1 && $self->min_perl_version >= 5.013005
-            ? '6.5702' : 0,
+        return 0 if not $self->min_perl_version >= 5.013005;
+        ( eval { Dist::Zilla->VERSION('7.000') } ? ()= $self->zilla->authors : @{ $self->zilla->authors } ) > 1
+            ? '6.5702' : 0;
     },
 );
 
