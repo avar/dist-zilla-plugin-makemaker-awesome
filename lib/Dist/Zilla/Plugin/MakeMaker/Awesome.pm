@@ -209,10 +209,14 @@ has eumm_version => (
     isa => 'Str',
     is  => 'rw',
     lazy => 1,
+    # We used to check ->min_perl_version here and return unless we had Perl
+    # 5.13.5 or greater. However, this will never work properly because this
+    # attribute will be used during the prereq registration phase. But we
+    # cannot determine the min perl version until all the prereqs are
+    # registered.
     default => sub {
         my $self = shift;
         # do not unnecessarily raise the version just for listref AUTHOR
-        return 0 if not $self->min_perl_version >= 5.013005;
         ( eval { Dist::Zilla->VERSION('7.000') } ? ()= $self->zilla->authors : @{ $self->zilla->authors } ) > 1
             ? '6.5702' : 0;
     },
