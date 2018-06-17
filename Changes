@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - quotes are used around eumm_version when necessary to ensure the proper
+    version check is done
 
 0.42      2018-05-03 02:47:37Z
   - fix for Dist::Zilla 7: ensure that the proper directory is used
