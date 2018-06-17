@@ -412,9 +412,10 @@ sub _build_footer {
 sub register_prereqs {
     my ($self) = @_;
 
+    (my $eumm_version = $self->eumm_version) =~ tr/_//d;
     $self->zilla->register_prereqs(
         { phase => 'configure' },
-        'ExtUtils::MakeMaker' => $self->eumm_version || 0,
+        'ExtUtils::MakeMaker' => $eumm_version,
     );
 
     return unless keys %{ $self->zilla->_share_dir_map };
