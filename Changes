@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
+{{$NEXT}}
+
 0.45      2018-06-24 00:24:47Z
   - revert removal of underscores from eumm_version when injecting into
     configure-requires prereqs and WriteMakefile arguments (0.44)
