@@ -15,7 +15,9 @@ use Path::Tiny;
 
 extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 # avoid wiping out the method modifications to dump_config done by superclass
-with 'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' };
+with
+    'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' },
+    'Dist::Zilla::Role::BeforeBuild';
 
 sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files header_strs footer_strs) }
 
@@ -482,6 +484,28 @@ sub setup_installer
     return;
 }
 
+sub before_build
+{
+    my $self = shift;
+
+    my @makemaker_plugins =
+        grep { $_->isa('Dist::Zilla::Plugin::MakeMaker') }
+        eval { Dist::Zilla->VERSION('7.000') } ? $self->zilla->plugins : @{ $self->zilla->plugins };
+
+    my @plugin_classes = map {
+        my $class = blessed($_);
+        ($class =~ s/^Dist::Zilla::Plugin:://) ? "[$class]" : $class;
+    } @makemaker_plugins;
+
+    my $classes = join(' and ',
+        (@plugin_classes > 2 ? join(', ', @plugin_classes[0 .. $#plugin_classes-1]) : $plugin_classes[0]),
+        $plugin_classes[-1],
+    );
+
+    $self->log_fatal([ 'You can\'t use %s at the same time!', $classes ])
+        if @makemaker_plugins > 1;
+}
+
 __PACKAGE__->meta->make_immutable;
 
 __END__
@@ -702,7 +726,7 @@ custom F<inc/> module. The work that this module does is entirely done in
 small modular methods that can be overridden in your subclass. Here are
 some of the highlights:
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases
+=for Pod::Coverage mvp_multivalue_args mvp_aliases before_build
 
 =head3 _build_MakeFile_PL_template
 
