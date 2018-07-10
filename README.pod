@@ -8,7 +8,7 @@ Dist::Zilla::Plugin::MakeMaker::Awesome - A more awesome MakeMaker plugin for L<
 
 =head1 VERSION
 
-version 0.45
+version 0.46
 
 =head1 SYNOPSIS
 
@@ -224,7 +224,7 @@ custom F<inc/> module. The work that this module does is entirely done in
 small modular methods that can be overridden in your subclass. Here are
 some of the highlights:
 
-=for Pod::Coverage mvp_multivalue_args mvp_aliases
+=for Pod::Coverage mvp_multivalue_args mvp_aliases before_build
 
 =head3 _build_MakeFile_PL_template
 
