@@ -1,5 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
+{{$NEXT}}
+
 0.46      2018-07-10 00:01:27Z
   - build now dies when multiple MakeMaker plugins are mistakenly used
 
