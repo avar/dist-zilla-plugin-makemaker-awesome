@@ -17,7 +17,7 @@ extends 'Dist::Zilla::Plugin::MakeMaker' => { -version => 5.001 };
 # avoid wiping out the method modifications to dump_config done by superclass
 with
     'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' },
-    'Dist::Zilla::Role::BeforeBuild';
+    'Dist::Zilla::Role::BeforeBuild'  => { -excludes => 'dump_config' };
 
 sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files header_strs footer_strs) }
 
