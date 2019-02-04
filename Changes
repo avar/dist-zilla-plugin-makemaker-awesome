@@ -1,6 +1,8 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - ensure DOTFILES and DOTDIRS are copied over from shared dirs during
+    install, matching the behaviour of <Dist::Zilla::Plugin::MakeMaker>.
 
 0.47      2018-07-11 03:33:49Z
   - fix test failures in various plugins caused by innocent changes in 0.46

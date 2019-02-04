@@ -320,6 +320,8 @@ sub _build_share_dir_block {
     if ( keys %$share_dir_map ) {
         # split in two to foil CPANTS prereq_matches_use
         my $preamble = qq{use File::Shar}.qq{eDir::Install;\n};
+        $preamble .= qq{\$File::ShareDir::Install::INCLUDE_DOTFILES = 1;\n};
+        $preamble .= qq{\$File::ShareDir::Install::INCLUDE_DOTDIRS = 1;\n};
         if ( my $dist_share_dir = $share_dir_map->{dist} ) {
             $dist_share_dir = quotemeta $dist_share_dir;
             $preamble .= qq{install_share dist => "$dist_share_dir";\n};
