@@ -68,7 +68,7 @@ use ExtUtils::MakeMaker{{
 my {{ $WriteMakefileArgs }}
 {{
     @$extra_args ? "%WriteMakefileArgs = (\n"
-        . join('', map { "    " . $_ . ",\n" } '%WriteMakefileArgs', @$extra_args)
+        . join('', map "    $_,\n", '%WriteMakefileArgs', @$extra_args)
         . ");\n"
     : '';
 }}
@@ -103,7 +103,7 @@ around BUILDARGS => sub
     my $delimiter = delete $args->{delimiter};
     if (defined $delimiter and length($delimiter))
     {
-        foreach my $arg (grep { exists $args->{$_} } qw(WriteMakefile_arg_strs header_strs footer_strs))
+        foreach my $arg (grep exists $args->{$_}, qw(WriteMakefile_arg_strs header_strs footer_strs))
         {
             s/^\Q$delimiter\E// foreach @{$args->{$arg}};
         }
@@ -165,9 +165,9 @@ sub _build_WriteMakefile_args {
         ->as_string_hash;
     };
 
-    my %require_prereqs = map {
-        $_ => $prereqs_dump->($_, 'requires');
-    } qw(configure build test runtime);
+    my %require_prereqs = map
+        +($_ => $prereqs_dump->($_, 'requires')),
+        qw(configure build test runtime);
 
     # EUMM may soon be able to support this, but until we decide to inject a
     # higher configure-requires version, we should at least warn the user
@@ -297,7 +297,7 @@ has exe_files => (
 sub _build_exe_files {
     my ($self) = @_;
 
-    my @exe_files = map { $_->name } @{ $self->zilla->find_files(':ExecFiles') };
+    my @exe_files = map $_->name, @{ $self->zilla->find_files(':ExecFiles') };
 
     return \@exe_files;
 }
@@ -451,7 +451,7 @@ sub setup_installer
 
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
-        if grep { /\s/ } @{$self->exe_files};
+        if grep /\s/, @{$self->exe_files};
 
     my $perl_prereq = $self->WriteMakefile_arg('MIN_PERL_VERSION');
 
@@ -491,7 +491,7 @@ sub before_build
     my $self = shift;
 
     my @makemaker_plugins =
-        grep { $_->isa('Dist::Zilla::Plugin::MakeMaker') }
+        grep $_->isa('Dist::Zilla::Plugin::MakeMaker'),
         eval { Dist::Zilla->VERSION('7.000') } ? $self->zilla->plugins : @{ $self->zilla->plugins };
 
     my @plugin_classes = map {
@@ -702,7 +702,7 @@ dynamically at build time:
         return +{
             %{ super() },
             DIR           => [ @DIR ],
-            INC           => join(' ', map { "-I$_" } @DIR),
+            INC           => join(' ', map "-I$_", @DIR),
 
             # This used to be '-shared lib*/*.o' but that doesn't work on Win32
             LDDLFLAGS     => "-shared @OBJ",
