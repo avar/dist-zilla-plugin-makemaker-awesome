@@ -425,7 +425,7 @@ sub register_prereqs {
 
     $self->zilla->register_prereqs(
         { phase => 'configure', type => 'requires' },
-        'File::ShareDir::Install' => 0.03,
+        'File::ShareDir::Install' => 0.06,
     );
 
     return {};
