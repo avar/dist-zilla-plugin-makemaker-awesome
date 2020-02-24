@@ -521,7 +521,7 @@ In your F<dist.ini>:
     [MakeMaker::Awesome]
     WriteMakefile_arg = CCFLAGS => `pkg-config --cflags libpng`
     WriteMakefile_arg = LIBS => [ `pkg-config --libs libpng` ]
-    header = die 'Unsupported OS' if $^O eq 'MSWin32';
+    header = die "Unsupported OS\n" if $^O eq 'MSWin32';
     delimiter = |
     footer = |package MY;
     footer = |sub postamble {
