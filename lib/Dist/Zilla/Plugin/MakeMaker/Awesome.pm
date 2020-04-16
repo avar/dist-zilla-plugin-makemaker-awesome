@@ -812,7 +812,7 @@ C<package MY> section to install it. Deep magic.
 
 The main entry point is C<setup_installer> via the
 L<Dist::Zilla::Role::InstallTool> role. There are also other magic
-Dist::Zilla roles, check the source for more info.
+Dist::Zilla roles; check the source for more info.
 
 =head1 DIAGNOSTICS
 
