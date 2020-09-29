@@ -19,13 +19,14 @@ with
     'Dist::Zilla::Role::FileGatherer' => { -excludes => 'dump_config' },
     'Dist::Zilla::Role::BeforeBuild'  => { -excludes => 'dump_config' };
 
-sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files header_strs footer_strs) }
+sub mvp_multivalue_args { qw(WriteMakefile_arg_strs test_files exe_files pl_files header_strs footer_strs) }
 
 sub mvp_aliases {
     +{
         WriteMakefile_arg => 'WriteMakefile_arg_strs',
         test_file => 'test_files',
         exe_file => 'exe_files',
+        pl_file => 'pl_files',
         header => 'header_strs',
         footer => 'footer_strs',
     }
@@ -184,6 +185,7 @@ sub _build_WriteMakefile_args {
 
     my @authors = eval { Dist::Zilla->VERSION('7.000') } ? $self->zilla->authors : @{ $self->zilla->authors };
     my $exe_files = $self->exe_files;
+    my $pl_files = $self->pl_files;
 
     my %WriteMakefile = (
         DISTNAME  => $self->zilla->name,
@@ -195,7 +197,7 @@ sub _build_WriteMakefile_args {
         VERSION   => $self->zilla->version,
         LICENSE   => $self->zilla->license->meta_yml_name,
         @$exe_files ? ( EXE_FILES => [ sort @$exe_files ] ) : (),
-
+        @$pl_files ? ( PL_FILES => $self->pl_files_as_hash() ) : (),
         CONFIGURE_REQUIRES => $require_prereqs{configure},
         keys %{ $require_prereqs{build} } ? ( BUILD_REQUIRES => $require_prereqs{build} ) : (),
         keys %{ $require_prereqs{test} } ? ( TEST_REQUIRES => $require_prereqs{test} ) : (),
@@ -293,6 +295,32 @@ has exe_files => (
     builder       => '_build_exe_files',
     documentation => "The list of filenames given to ExtUtils::MakeMaker's EXE_FILES (in munged form)",
 );
+
+has pl_files => (
+    is            => 'ro',
+    isa           => ArrayRef[Str],
+    lazy          => 1,
+    default       => sub { [] },
+    documentation => "The list of filenames given to ExtUtils::MakeMaker's PL_FILES (in munged form)",
+);
+
+sub pl_files_as_hash {
+    my ( $self ) = @_;
+
+    my $pl_files = $self->pl_files;
+    return unless scalar @$pl_files;
+
+    my %h;
+    foreach my $f ( @$pl_files ) {
+        if ( $f =~ m{^(.+)\.PL$} ) {
+            $h{$f} = $1;
+        } else {
+            $h{$f.'.PL'} = $f;
+        }
+    }
+
+    return \%h;
+}
 
 sub _build_exe_files {
     my ($self) = @_;
@@ -451,7 +479,7 @@ sub setup_installer
 
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
-        if grep /\s/, @{$self->exe_files};
+        if grep /\s/, @{$self->exe_files}, @{$self->pl_files};
 
     my $perl_prereq = $self->WriteMakefile_arg('MIN_PERL_VERSION');
 
@@ -619,6 +647,18 @@ L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
 Defaults to using data from C<:ExecDir> plugins.
 
 Available since version 0.21.
+
+=head2 pl_file
+
+The file given to the C<PL_FILES> parameter for
+L<ExtUtils::MakeMaker/WriteMakefile>. Can be used more than once.
+
+Example:
+
+    pl_file = script/Dynamic.PL
+
+Available since version 0.49.
+
 
 =head1 SUBCLASSING
 

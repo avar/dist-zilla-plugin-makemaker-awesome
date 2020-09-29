@@ -6,6 +6,7 @@ use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
 use Test::DZil;
 use Path::Tiny;
 use Test::Fatal;
+use Test::Deep;
 use File::pushd 'pushd';
 
 use Dist::Zilla::Plugin::MakeMaker::Awesome;
@@ -33,13 +34,22 @@ my $tzil = Builder->from_config(
 eumm_version = 6.01
 WriteMakefile_arg = CCFLAGS => '-Wall'
 test_file = xt/*.t
+pl_file = bin/dynamic.PL
 exe_file = bin/hello-world
+exe_file = bin/dynamic
 header = my \$string = 'oh hai';
 footer = my \$other_string = 'and I like ponies';
 END_INI
             path(qw(source lib DZT Sample.pm)) => 'package DZT::Sample; 1',
             path(qw(source xt foo.t)) => 'warn "here is an extra test";',
             path(qw(source bin hello-world)) => "#!/usr/bin/perl\nprint \"hello!\\n\"",
+            path(qw(source bin dynamic.PL)) => <<'DYNAMIC_PL',
+#!/usr/bin/perl
+my $s = $0;
+$s =~ s{\.PL$}{};
+open( my $fh, '>', $s ) or die $!;
+print {$fh} 'print q[This is a dynamic script\n];';
+DYNAMIC_PL
         },
     },
 );
@@ -77,7 +87,13 @@ like(
 );
 like(
     $content,
-    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/hello-world"\n^\s+\],}m,
+    qr{^\s+"EXE_FILES"\s+=>\s+\[\n^\s+"bin/dynamic",\n^\s+"bin/hello-world"\n^\s+\],}m,
+    'exe files were set',
+);
+
+like(
+    $content,
+    qr{^\s+"PL_FILES"\s+=>\s+\{\n^\s+"bin/dynamic.PL"\s*=>\s*"bin/dynamic"\n^\s+\},}m,
     'exe files were set',
 );
 
@@ -105,5 +121,11 @@ subtest 'run the generated Makefile.PL' => sub
 
 diag 'got log messages: ', explain $tzil->log_messages
     if not Test::Builder->new->is_passing;
+
+cmp_deeply(
+    $tzil->plugin_named('MakeMaker::Awesome')->pl_files_as_hash(),
+    { 'bin/dynamic.PL' => 'bin/dynamic' },
+    "pl_files_as_hash generate hash"
+);
 
 done_testing;
