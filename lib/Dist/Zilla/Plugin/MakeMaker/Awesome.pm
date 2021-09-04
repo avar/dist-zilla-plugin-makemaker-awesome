@@ -443,6 +443,25 @@ sub gather_files
     return;
 }
 
+sub template_arguments {
+    my $self = shift;
+
+    my $perl_prereq = $self->WriteMakefile_arg('MIN_PERL_VERSION');
+
+    return +{
+        dist              => \($self->zilla),
+        plugin            => \$self,
+        eumm_version      => \($self->eumm_version),
+        perl_prereq       => \$perl_prereq,
+        share_dir_block   => [ $self->share_dir_block ],
+        fallback_prereqs  => \($self->fallback_prereq_pm),
+        WriteMakefileArgs => \($self->WriteMakefile_dump),
+        extra_args        => \($self->WriteMakefile_arg_strs),
+        header            => \$self->header,
+        footer            => \$self->footer,
+    };
+}
+
 sub setup_installer
 {
     my $self = shift;
@@ -450,8 +469,6 @@ sub setup_installer
     ## Sanity checks
     $self->log_fatal("can't install files with whitespace in their names")
         if grep /\s/, @{$self->exe_files};
-
-    my $perl_prereq = $self->WriteMakefile_arg('MIN_PERL_VERSION');
 
     # file was already created; find it and fill in the content
     my $file = first { $_->name eq 'Makefile.PL' } @{$self->zilla->files};
@@ -461,21 +478,7 @@ sub setup_installer
             . "\n" . '(instead, try [GatherDir] exclude_filename = Makefile.PL)')
         if not $file;
 
-    my $content = $self->fill_in_string(
-        $file->content,
-        {
-            dist              => \($self->zilla),
-            plugin            => \$self,
-            eumm_version      => \($self->eumm_version),
-            perl_prereq       => \$perl_prereq,
-            share_dir_block   => [ $self->share_dir_block ],
-            fallback_prereqs  => \($self->fallback_prereq_pm),
-            WriteMakefileArgs => \($self->WriteMakefile_dump),
-            extra_args        => \($self->WriteMakefile_arg_strs),
-            header            => \$self->header,
-            footer            => \$self->footer,
-        },
-    );
+    my $content = $self->fill_in_string($file->content, $self->template_arguments);
 
     $content =~ s/\n{3,}/\n\n/g;
     $content =~ s/\n+\z/\n/;
@@ -785,6 +788,12 @@ Defaults to using data from C<:ExecDir> plugins.
 Extracts from the distribution prerequisite object the minimum version of perl
 required; used for the C<MIN_PERL_VERSION> parameter for
 L<ExtUtils::MakeMaker/WriteMakefile>.
+
+=head2 template_arguments
+
+Returns a hashref of arguments to be used by the template returned by L</Makefile_PL_template>.
+Normally you would C<around> (see L<Moose::Manual::Method::Modifiers/Around modifiers>) this method
+to add on any additional template variables you need.
 
 =head2 register_prereqs
 
