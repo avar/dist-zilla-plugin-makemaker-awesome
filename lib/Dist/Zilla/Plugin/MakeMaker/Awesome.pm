@@ -2,7 +2,7 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 # ABSTRACT: A more awesome MakeMaker plugin for L<Dist::Zilla>
 # KEYWORDS: plugin installer MakeMaker Makefile.PL toolchain customize override
 
-our $VERSION = '0.49';
+our $VERSION = '0.50';
 
 use Moose;
 use Types::Standard qw(Str ArrayRef HashRef);
