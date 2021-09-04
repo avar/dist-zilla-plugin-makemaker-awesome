@@ -1,6 +1,6 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
-{{$NEXT}}
+0.49      2021-09-04 20:21:07Z
   - switched from MooseX::Types to Types::Standard
   - extracted the hashref of template arguments out to a sub
     ("template_arguments") to allow for method modification (RT#137585)
