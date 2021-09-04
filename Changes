@@ -1,6 +1,7 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - switched from MooseX::Types to Types::Standard
 
 0.48      2019-04-27 05:03:11Z
   - ensure DOTFILES and DOTDIRS are copied over from shared dirs during

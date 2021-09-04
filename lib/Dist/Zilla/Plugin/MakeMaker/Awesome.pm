@@ -5,8 +5,8 @@ package Dist::Zilla::Plugin::MakeMaker::Awesome;
 our $VERSION = '0.49';
 
 use Moose;
-use MooseX::Types::Moose qw< Str ArrayRef HashRef >;
-use MooseX::Types::Stringlike 'Stringlike';
+use Types::Standard qw(Str ArrayRef HashRef);
+use Types::TypeTiny 'StringLike';
 use namespace::autoclean;
 use CPAN::Meta::Requirements 2.121; # requirements_for_module
 use List::Util 1.29 qw(first pairs pairgrep);
@@ -33,8 +33,7 @@ sub mvp_aliases {
 
 has MakeFile_PL_template => (
     is            => 'ro',
-    isa           => Stringlike,
-    coerce        => 1,
+    isa           => StringLike,
     lazy          => 1,
     builder       => '_build_MakeFile_PL_template',
     documentation => "The Text::Template used to construct the ExtUtils::MakeMaker Makefile.PL",
@@ -249,8 +248,7 @@ sub _build_min_perl_version
 
 has WriteMakefile_dump => (
     is            => 'ro',
-    isa           => Stringlike,
-    coerce        => 1,
+    isa           => StringLike,
     lazy          => 1,
     builder       => '_build_WriteMakefile_dump',
     documentation => "A Data::Dumper Str for using WriteMakefile_args used by MakeFile_PL_template"
