@@ -1,6 +1,12 @@
 Revision history for Dist-Zilla-Plugin-MakeMaker-Awesome
 
 {{$NEXT}}
+  - In many cases (perhaps all), this plugin would miss a minimum perl
+    version. This happened because it attempted to look determine this by
+    looking at the distro's prereqs _during_ the prereq registration phase,
+    which cannot work properly. This has been fixed, but the downside is that
+    this plugin may end up requiring a minimum ExtUtils::MakeMaker of 6.5702
+    for Perls < 5.14. Fixed by Dave Rolsky. GH #9.
 
 0.49      2021-09-04 20:21:07Z
   - switched from MooseX::Types to Types::Standard
